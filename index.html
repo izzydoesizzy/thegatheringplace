@@ -679,6 +679,128 @@
         If you can make $20,000 in new business using this space in a year, it pays for itself.
       </p>
     </div>
+
+    <!-- ── ROI Calculator ─────────────────────────────────────── -->
+    <div style="margin-top: 3rem;">
+      <p class="label" style="margin-bottom: 0.75rem;">Run The Numbers</p>
+      <h3 class="h-xs" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 0.75rem; color: var(--text);">
+        What you're already paying for — separately.
+      </h3>
+      <p style="font-size: 0.9375rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.625;">
+        Check the things that apply to you. See what the same set of resources actually costs when you buy them one by one.
+      </p>
+
+      <!-- Line items -->
+      <div id="roi-items" style="display: flex; flex-direction: column; gap: 0.625rem; margin-bottom: 2rem;">
+
+        <label class="roi-row" data-cost="800" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); cursor: pointer; transition: border-color 150ms; user-select: none;">
+          <span style="display: flex; align-items: center; gap: 0.875rem;">
+            <span class="roi-check" style="width: 18px; height: 18px; border-radius: 2px; border: 1px solid var(--muted3); background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 150ms, border-color 150ms;">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" class="roi-tick" style="opacity:0;transition:opacity 150ms;"><path d="M1 4l2.5 2.5L9 1" stroke="#0c0a08" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span style="font-size: 0.9375rem; color: var(--text2);">Professional video studio rental <span style="font-size: 0.8125rem; color: var(--muted2);">(2 days / month)</span></span>
+          </span>
+          <span class="roi-price" style="font-size: 0.9375rem; font-weight: 500; color: var(--muted); flex-shrink: 0; margin-left: 1rem;">$800<span style="font-size: 0.75rem; font-weight: 400;">/mo</span></span>
+        </label>
+
+        <label class="roi-row" data-cost="1200" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); cursor: pointer; transition: border-color 150ms; user-select: none;">
+          <span style="display: flex; align-items: center; gap: 0.875rem;">
+            <span class="roi-check" style="width: 18px; height: 18px; border-radius: 2px; border: 1px solid var(--muted3); background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 150ms, border-color 150ms;">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" class="roi-tick" style="opacity:0;transition:opacity 150ms;"><path d="M1 4l2.5 2.5L9 1" stroke="#0c0a08" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span style="font-size: 0.9375rem; color: var(--text2);">Video editor + social content production</span>
+          </span>
+          <span class="roi-price" style="font-size: 0.9375rem; font-weight: 500; color: var(--muted); flex-shrink: 0; margin-left: 1rem;">$1,200<span style="font-size: 0.75rem; font-weight: 400;">/mo</span></span>
+        </label>
+
+        <label class="roi-row" data-cost="1000" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); cursor: pointer; transition: border-color 150ms; user-select: none;">
+          <span style="display: flex; align-items: center; gap: 0.875rem;">
+            <span class="roi-check" style="width: 18px; height: 18px; border-radius: 2px; border: 1px solid var(--muted3); background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 150ms, border-color 150ms;">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" class="roi-tick" style="opacity:0;transition:opacity 150ms;"><path d="M1 4l2.5 2.5L9 1" stroke="#0c0a08" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span style="font-size: 0.9375rem; color: var(--text2);">Business or executive coach <span style="font-size: 0.8125rem; color: var(--muted2);">(monthly retainer)</span></span>
+          </span>
+          <span class="roi-price" style="font-size: 0.9375rem; font-weight: 500; color: var(--muted); flex-shrink: 0; margin-left: 1rem;">$1,000<span style="font-size: 0.75rem; font-weight: 400;">/mo</span></span>
+        </label>
+
+        <label class="roi-row" data-cost="800" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); cursor: pointer; transition: border-color 150ms; user-select: none;">
+          <span style="display: flex; align-items: center; gap: 0.875rem;">
+            <span class="roi-check" style="width: 18px; height: 18px; border-radius: 2px; border: 1px solid var(--muted3); background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 150ms, border-color 150ms;">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" class="roi-tick" style="opacity:0;transition:opacity 150ms;"><path d="M1 4l2.5 2.5L9 1" stroke="#0c0a08" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span style="font-size: 0.9375rem; color: var(--text2);">Speaking coach <span style="font-size: 0.8125rem; color: var(--muted2);">(monthly retainer)</span></span>
+          </span>
+          <span class="roi-price" style="font-size: 0.9375rem; font-weight: 500; color: var(--muted); flex-shrink: 0; margin-left: 1rem;">$800<span style="font-size: 0.75rem; font-weight: 400;">/mo</span></span>
+        </label>
+
+        <label class="roi-row" data-cost="500" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); cursor: pointer; transition: border-color 150ms; user-select: none;">
+          <span style="display: flex; align-items: center; gap: 0.875rem;">
+            <span class="roi-check" style="width: 18px; height: 18px; border-radius: 2px; border: 1px solid var(--muted3); background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 150ms, border-color 150ms;">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" class="roi-tick" style="opacity:0;transition:opacity 150ms;"><path d="M1 4l2.5 2.5L9 1" stroke="#0c0a08" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span style="font-size: 0.9375rem; color: var(--text2);">Premium co-working or private office</span>
+          </span>
+          <span class="roi-price" style="font-size: 0.9375rem; font-weight: 500; color: var(--muted); flex-shrink: 0; margin-left: 1rem;">$500<span style="font-size: 0.75rem; font-weight: 400;">/mo</span></span>
+        </label>
+
+        <label class="roi-row" data-cost="500" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); cursor: pointer; transition: border-color 150ms; user-select: none;">
+          <span style="display: flex; align-items: center; gap: 0.875rem;">
+            <span class="roi-check" style="width: 18px; height: 18px; border-radius: 2px; border: 1px solid var(--muted3); background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 150ms, border-color 150ms;">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" class="roi-tick" style="opacity:0;transition:opacity 150ms;"><path d="M1 4l2.5 2.5L9 1" stroke="#0c0a08" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span style="font-size: 0.9375rem; color: var(--text2);">Peer mastermind membership</span>
+          </span>
+          <span class="roi-price" style="font-size: 0.9375rem; font-weight: 500; color: var(--muted); flex-shrink: 0; margin-left: 1rem;">$500<span style="font-size: 0.75rem; font-weight: 400;">/mo</span></span>
+        </label>
+
+        <label class="roi-row" data-cost="600" data-default="off" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); cursor: pointer; transition: border-color 150ms; user-select: none;">
+          <span style="display: flex; align-items: center; gap: 0.875rem;">
+            <span class="roi-check" style="width: 18px; height: 18px; border-radius: 2px; border: 1px solid var(--muted3); background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 150ms, border-color 150ms;">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" class="roi-tick" style="opacity:0;transition:opacity 150ms;"><path d="M1 4l2.5 2.5L9 1" stroke="#0c0a08" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span style="font-size: 0.9375rem; color: var(--text2);">Retreat or workshop venue rental <span style="font-size: 0.8125rem; color: var(--muted2);">(amortised across year)</span></span>
+          </span>
+          <span class="roi-price" style="font-size: 0.9375rem; font-weight: 500; color: var(--muted); flex-shrink: 0; margin-left: 1rem;">$600<span style="font-size: 0.75rem; font-weight: 400;">/mo</span></span>
+        </label>
+
+        <label class="roi-row" data-cost="200" data-default="off" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); cursor: pointer; transition: border-color 150ms; user-select: none;">
+          <span style="display: flex; align-items: center; gap: 0.875rem;">
+            <span class="roi-check" style="width: 18px; height: 18px; border-radius: 2px; border: 1px solid var(--muted3); background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 150ms, border-color 150ms;">
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" class="roi-tick" style="opacity:0;transition:opacity 150ms;"><path d="M1 4l2.5 2.5L9 1" stroke="#0c0a08" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span style="font-size: 0.9375rem; color: var(--text2);">Conference or networking event access <span style="font-size: 0.8125rem; color: var(--muted2);">(amortised)</span></span>
+          </span>
+          <span class="roi-price" style="font-size: 0.9375rem; font-weight: 500; color: var(--muted); flex-shrink: 0; margin-left: 1rem;">$200<span style="font-size: 0.75rem; font-weight: 400;">/mo</span></span>
+        </label>
+
+      </div>
+
+      <!-- Summary -->
+      <div style="padding: 1.5rem; border-radius: 2px; background: var(--bg); border: 1px solid var(--muted4);">
+
+        <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 0.875rem; border-bottom: 1px solid var(--muted5); margin-bottom: 0.875rem;">
+          <span style="font-size: 0.875rem; color: var(--muted2);">Your à la carte cost</span>
+          <span id="roi-total" style="font-size: 1.375rem; font-weight: 700; color: var(--gold); letter-spacing: -0.02em;">$4,800<span style="font-size: 0.875rem; font-weight: 400; color: var(--muted2);">/mo</span></span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 0.875rem; border-bottom: 1px solid var(--muted5); margin-bottom: 0.875rem;">
+          <span style="font-size: 0.875rem; color: var(--muted2);">The Gathering Place membership</span>
+          <span style="font-size: 1.375rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em;">$2,500<span style="font-size: 0.875rem; font-weight: 400; color: var(--muted2);">/mo</span></span>
+        </div>
+
+        <div id="roi-savings-row" style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-size: 0.875rem; color: var(--muted2);">You come out ahead by</span>
+          <span id="roi-savings" style="font-size: 1rem; font-weight: 600; color: var(--gold2); letter-spacing: -0.01em;"></span>
+        </div>
+
+      </div>
+
+      <p style="margin-top: 1.25rem; font-size: 0.8125rem; font-style: italic; text-align: center; color: var(--muted3);">
+        And none of the above includes the room — or the people in it.
+      </p>
+    </div>
+    <!-- ── /ROI Calculator ──────────────────────────────────────── -->
+
   </div>
 </section>
 
@@ -845,6 +967,62 @@
   <p style="font-size: 0.75rem; color: var(--muted4);">A Drew Dudley project.</p>
 </footer>
 
+
+<!-- ── ROI Calculator Logic ───────────────────────────────────────────────────── -->
+<script>
+(function () {
+  var MEMBERSHIP = 2500;
+  var rows = document.querySelectorAll('.roi-row');
+  var totalEl = document.getElementById('roi-total');
+  var savingsEl = document.getElementById('roi-savings');
+  var savingsRow = document.getElementById('roi-savings-row');
+
+  function fmt(n) {
+    return '$' + n.toLocaleString('en-US');
+  }
+
+  function update() {
+    var sum = 0;
+    rows.forEach(function (row) {
+      if (row.dataset.checked === '1') sum += parseInt(row.dataset.cost, 10);
+    });
+    totalEl.innerHTML = fmt(sum) + '<span style="font-size:0.875rem;font-weight:400;color:var(--muted2);">/mo</span>';
+    var diff = sum - MEMBERSHIP;
+    if (diff > 0) {
+      savingsRow.style.display = 'flex';
+      savingsEl.textContent = fmt(diff) + '/mo  (' + fmt(diff * 12) + '/yr)';
+    } else {
+      savingsRow.style.display = 'none';
+    }
+  }
+
+  rows.forEach(function (row) {
+    var isOff = row.dataset.default === 'off';
+    row.dataset.checked = isOff ? '0' : '1';
+
+    var check = row.querySelector('.roi-check');
+    var tick  = row.querySelector('.roi-tick');
+
+    function apply() {
+      var on = row.dataset.checked === '1';
+      check.style.background  = on ? 'var(--gold)' : 'transparent';
+      check.style.borderColor = on ? 'var(--gold)' : 'var(--muted3)';
+      tick.style.opacity      = on ? '1' : '0';
+      row.style.borderColor   = on ? 'var(--muted3)' : 'var(--muted4)';
+    }
+
+    apply();
+
+    row.addEventListener('click', function () {
+      row.dataset.checked = row.dataset.checked === '1' ? '0' : '1';
+      apply();
+      update();
+    });
+  });
+
+  update();
+})();
+</script>
 
 <!-- ── Fire Canvas Animation ──────────────────────────────────────────────────
      Classic demoscene fire algorithm: seeds bottom row with random heat,
