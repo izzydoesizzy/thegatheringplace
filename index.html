@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Gathering Place</title>
+  <meta name="description" content="A private membership club for creative professionals. A place for creatives who are done performing." />
+
+  <!-- Preconnect for fonts and images -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0c0a08;
+      --bg2:       #111009;
+      --bg3:       #161210;
+      --text:      #f0ebe2;
+      --text2:     #d4cbbe;
+      --muted:     #9a8f82;
+      --muted2:    #6a5e52;
+      --muted3:    #4a3e32;
+      --muted4:    #2e2822;
+      --muted5:    #1e1a16;
+      --gold:      #c4922a;
+      --gold2:     #c4a882;
+      --gold-h:    #d4a85a;
+      --border:    #2e2822;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    img { display: block; }
+    a { color: inherit; }
+
+    /* ── Utility ─────────────────────────────────────── */
+    .label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+    }
+    .section { padding: 6rem 1.5rem; }
+    .container-sm  { max-width: 42rem;  margin: 0 auto; }
+    .container-md  { max-width: 52rem;  margin: 0 auto; }
+    .container-lg  { max-width: 80rem;  margin: 0 auto; }
+    .divider { height: 1px; background: var(--muted4); margin: 0 auto; max-width: 42rem; }
+    .divider-lg { max-width: 80rem; }
+
+    /* ── Buttons ─────────────────────────────────────── */
+    .btn-gold {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 200ms;
+    }
+    .btn-gold:hover { background: var(--gold-h); }
+    .btn-gold-block {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      border-radius: 2px;
+      text-align: center;
+      transition: background 200ms;
+    }
+    .btn-gold-block:hover { background: var(--gold-h); }
+
+    /* ── Forms ────────────────────────────────────────── */
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.875rem;
+      font-family: inherit;
+      border-radius: 2px;
+      outline: none;
+      resize: none;
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted3); }
+
+    /* ── Heading sizes ────────────────────────────────── */
+    .h-xl  { font-size: clamp(3rem, 10vw, 7rem); }
+    .h-lg  { font-size: clamp(2rem, 5vw, 3.5rem); }
+    .h-md  { font-size: clamp(1.75rem, 4vw, 2.75rem); }
+    .h-sm  { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
+    .h-xs  { font-size: clamp(1.4rem, 3vw, 1.875rem); }
+
+    /* ── Cards ────────────────────────────────────────── */
+    .card {
+      padding: 2rem;
+      border-radius: 2px;
+      background: var(--bg3);
+      border-top: 2px solid var(--gold);
+    }
+
+    /* ── Responsive two-col layout ───────────────────── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .grid-2 .order-1 { order: 1; }
+      .grid-2 .order-2 { order: 2; }
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .grid-2-sm {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) {
+      .grid-2-sm { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Timeline ─────────────────────────────────────── */
+    .timeline { position: relative; }
+    .timeline-line {
+      display: none;
+      position: absolute;
+      left: 7px;
+      top: 12px;
+      bottom: 12px;
+      width: 1px;
+      background: var(--muted4);
+    }
+    @media (min-width: 768px) { .timeline-line { display: block; } }
+
+    .timeline-item {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--muted5);
+    }
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-dot {
+      display: none;
+      flex-shrink: 0;
+      margin-top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+    @media (min-width: 768px) { .timeline-dot { display: block; } }
+
+    .timeline-thumb {
+      display: none;
+      flex-shrink: 0;
+      width: 160px;
+      height: 100px;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+    @media (min-width: 1024px) { .timeline-thumb { display: block; } }
+    .timeline-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── FAQ ──────────────────────────────────────────── */
+    .faq-item { padding: 2rem 0; border-top: 1px solid var(--muted4); }
+    .faq-item:last-child { border-bottom: 1px solid var(--muted4); }
+
+    /* ── Aspect ratios ────────────────────────────────── */
+    .ratio-4-3  { aspect-ratio: 4/3;  overflow: hidden; border-radius: 2px; }
+    .ratio-16-9 { aspect-ratio: 16/9; overflow: hidden; border-radius: 2px; }
+    .ratio-4-3 img, .ratio-16-9 img { width: 100%; height: 100%; object-fit: cover; }
+  </style>
+</head>
+
+<body>
+
+<!-- ────────────────────────────────────────────────────────────────
+     1. HERO
+────────────────────────────────────────────────────────────────── -->
+<section style="position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; overflow: hidden;">
+
+  <!-- Fire background -->
+  <div style="position: absolute; inset: 0;">
+    <img
+      src="https://images.unsplash.com/photo-1618325508550-951512a1e82d?w=1920&q=80&fit=crop&auto=format"
+      alt=""
+      aria-hidden="true"
+      style="width: 100%; height: 100%; object-fit: cover; opacity: 0.45;"
+    />
+    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(12,10,8,0.55) 0%, rgba(12,10,8,0.2) 40%, rgba(12,10,8,0.7) 100%);"></div>
+  </div>
+
+  <!-- Content -->
+  <div style="position: relative; z-index: 10; max-width: 48rem; margin: 0 auto;">
+    <p class="label" style="margin-bottom: 1.5rem;">A Private Creative Club</p>
+
+    <h1 class="h-xl" style="font-weight: 700; line-height: 1; letter-spacing: -0.02em; margin-bottom: 1.5rem; color: var(--text);">
+      The Gathering<br>Place
+    </h1>
+
+    <p style="color: var(--text2); font-size: 1.125rem; line-height: 1.625; max-width: 480px; margin: 0 auto 2.5rem;">
+      A place for creatives who are done performing.
+    </p>
+
+    <a href="#invitation" class="btn-gold">Request an Invitation</a>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--muted);">
+    <span style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;">Scroll</span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="opacity: 0.6;">
+      <path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     2. THE ORIGIN
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg);">
+  <div class="container-sm">
+    <p class="label" style="margin-bottom: 2.5rem;">Why It Exists</p>
+
+    <blockquote class="h-xs" style="font-style: italic; font-weight: 400; line-height: 1.625; color: var(--text); border-left: 2px solid var(--gold); padding-left: 1.75rem; margin-bottom: 3rem;">
+      "What would it look like to spend a year sitting around a fire with people I find genuinely interesting — and just let it be that?"
+    </blockquote>
+
+    <div style="color: var(--muted); font-size: 1rem; line-height: 1.75; display: flex; flex-direction: column; gap: 1.5rem;">
+      <p>After twenty years on the road, 1,000 speeches, and fifteen years with the same company, Drew Dudley noticed something. His brain had stopped saying <em style="color: var(--gold2);">oh, that's interesting</em> about being on stage.</p>
+      <p>Not that speaking had stopped feeling good — it still did. But the excitement that used to exist <em style="color: var(--gold2);">before</em> he got on stage was gone. The craft had become routine. And he knew what that meant.</p>
+      <p>So he started designing the thing he actually wanted. Not a program. Not a curriculum. Not a conference. Every time he imagined it, the same image kept coming back: gathered around a fire with people he found genuinely interesting. No agenda. No obligation to perform. Just depth — and the freedom to go quiet when you need to.</p>
+      <p style="color: var(--gold2);">The Gathering Place is that image turned into a business.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="padding: 0 1.5rem;"><div style="height:1px;background:var(--muted4);"></div></div>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     3. DREW DUDLEY (FOUNDER)
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg);">
+  <div class="container-lg">
+    <div class="grid-2">
+
+      <!-- Photo -->
+      <div class="order-2" style="position: relative;">
+        <div class="ratio-4-3" style="position: relative;">
+          <img
+            src="https://images.unsplash.com/photo-1676063258992-1562bbecb583?w=1200&q=85&fit=crop&auto=format"
+            alt="Speaker on stage under dramatic spotlight"
+            loading="lazy"
+          />
+          <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(12,10,8,0.5) 0%, transparent 50%);"></div>
+        </div>
+        <p style="margin-top: 0.75rem; font-size: 0.75rem; text-align: center; color: var(--muted3); letter-spacing: 0.06em;">
+          Drew Dudley — Keynote speaker, Day One Leadership
+        </p>
+      </div>
+
+      <!-- Bio -->
+      <div class="order-1">
+        <p class="label" style="margin-bottom: 1.5rem;">The Founder</p>
+
+        <h2 class="h-md" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 1.5rem; color: var(--text);">
+          Drew Dudley
+        </h2>
+
+        <p style="margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.625; color: var(--muted);">
+          Drew spent two decades as a professional speaker — 1,000 keynotes, tens of thousands of rooms, fifteen years with the same organization. He's studied how people talk to each other, how they lead, and what happens in the rare moments when someone really says something.
+        </p>
+
+        <p style="margin-bottom: 2.5rem; font-size: 1rem; line-height: 1.625; color: var(--muted);">
+          The Gathering Place is not his next program. It's the room he actually wants to live in — built for the people he wants to think alongside.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0;">
+          <div style="display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--muted5); padding-bottom: 1rem; margin-bottom: 1rem;">
+            <span style="font-weight: 700; font-size: 1.5rem; color: var(--gold); letter-spacing: -0.02em; flex-shrink: 0;">20+</span>
+            <span style="font-size: 0.875rem; color: var(--muted2);">Years as a professional speaker</span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--muted5); padding-bottom: 1rem; margin-bottom: 1rem;">
+            <span style="font-weight: 700; font-size: 1.5rem; color: var(--gold); letter-spacing: -0.02em; flex-shrink: 0;">1,000+</span>
+            <span style="font-size: 0.875rem; color: var(--muted2);">Keynote speeches delivered</span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--muted5); padding-bottom: 1rem;">
+            <span style="font-weight: 700; font-size: 1.5rem; color: var(--gold); letter-spacing: -0.02em; flex-shrink: 0;">Day One</span>
+            <span style="font-size: 0.875rem; color: var(--muted2);">Leadership — his company, his methodology</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider divider-lg" style="padding: 0 1.5rem;"><div style="height:1px;background:var(--muted4);"></div></div>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     4. WHAT IT IS
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg);">
+  <div class="container-lg">
+    <p class="label" style="margin-bottom: 1rem;">The Concept</p>
+
+    <h2 class="h-md" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 4rem; color: var(--text);">
+      Not a conference. Not a co-working space.<br>Not an event.
+    </h2>
+
+    <div class="grid-3">
+
+      <div class="card">
+        <h3 style="margin-bottom: 1rem; font-weight: 600; font-size: 1.125rem; color: var(--text);">A Physical Space</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted);">Rotating high-end properties — a mansion in Toronto, a cottage in the Kawarthas, a place in Barbados. Yours to use as an office, a studio, somewhere to host a client, or just somewhere to think.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 1rem; font-weight: 600; font-size: 1.125rem; color: var(--text);">A Living Culture</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted);">A small set of principles — not rules — designed for creatives who talk too much and listen too little. In the best way. A place where you don't have to explain yourself to be understood.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 1rem; font-weight: 600; font-size: 1.125rem; color: var(--text);">A Founding Cohort</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted);">Twelve seats. Hand-picked. The people in the first year set the tone for everything that follows. If four seats don't fill with the right people, they stay empty.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     5. THE CULTURE
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg2);">
+  <div class="container-md">
+    <p class="label" style="margin-bottom: 1rem;">How It Works</p>
+
+    <h2 class="h-md" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 1rem; color: var(--text);">
+      A few principles.<br>Not rules.
+    </h2>
+
+    <p style="margin-bottom: 4rem; font-size: 1rem; line-height: 1.625; color: var(--muted); max-width: 520px;">
+      Smart, excited people tend to talk over each other. We build. We riff. We finish each other's ideas before they're fully formed. These principles exist to slow that down — just enough.
+    </p>
+
+    <div class="grid-2-sm" style="margin-bottom: 2.5rem;">
+
+      <div style="padding: 1.5rem; border-radius: 2px; display: flex; gap: 1.25rem; align-items: flex-start; background: var(--bg3); border: 1px solid var(--muted4);">
+        <span style="font-size: 0.75rem; font-weight: 500; margin-top: 2px; flex-shrink: 0; color: var(--gold);">01</span>
+        <p style="font-size: 1rem; font-weight: 500; line-height: 1.4; color: var(--text);">No performance required.</p>
+      </div>
+
+      <div style="padding: 1.5rem; border-radius: 2px; display: flex; gap: 1.25rem; align-items: flex-start; background: var(--bg3); border: 1px solid var(--muted4);">
+        <span style="font-size: 0.75rem; font-weight: 500; margin-top: 2px; flex-shrink: 0; color: var(--gold);">02</span>
+        <p style="font-size: 1rem; font-weight: 500; line-height: 1.4; color: var(--text);">Pause before answering.</p>
+      </div>
+
+      <div style="padding: 1.5rem; border-radius: 2px; display: flex; gap: 1.25rem; align-items: flex-start; background: var(--bg3); border: 1px solid var(--muted4);">
+        <span style="font-size: 0.75rem; font-weight: 500; margin-top: 2px; flex-shrink: 0; color: var(--gold);">03</span>
+        <p style="font-size: 1rem; font-weight: 500; line-height: 1.4; color: var(--text);">Ask more than you answer.</p>
+      </div>
+
+      <div style="padding: 1.5rem; border-radius: 2px; display: flex; gap: 1.25rem; align-items: flex-start; background: var(--bg3); border: 1px solid var(--muted4);">
+        <span style="font-size: 0.75rem; font-weight: 500; margin-top: 2px; flex-shrink: 0; color: var(--gold);">04</span>
+        <p style="font-size: 1rem; font-weight: 500; line-height: 1.4; color: var(--text);">Don't speak for more than 90 seconds straight before 5pm.</p>
+      </div>
+
+    </div>
+
+    <p style="margin-bottom: 3rem; font-size: 0.875rem; font-style: italic; text-align: center; color: var(--muted2);">
+      By the fire, none of the above applies.
+    </p>
+
+    <div style="padding: 2rem; border-radius: 2px; background: var(--bg); border: 1px solid var(--muted4); border-left: 3px solid var(--gold);">
+      <h3 style="margin-bottom: 0.75rem; font-weight: 600; font-size: 1rem; color: var(--gold);">The Am I Crazy Room</h3>
+      <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted);">
+        Every space has a chair — or a room — that means one thing: if you're sitting in it, you want someone to walk in and listen to your idea. You want them to ask: <em style="color: var(--gold2);">am I crazy?</em> Nobody throws their ideas at people who aren't ready to receive them. The chair is the signal.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     6. WHAT'S INCLUDED
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg);">
+  <div class="container-lg">
+    <div class="grid-2">
+
+      <!-- Left: benefits list -->
+      <div>
+        <p class="label" style="margin-bottom: 1rem;">Membership Includes</p>
+
+        <h2 class="h-sm" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 2.5rem; color: var(--text);">
+          Everything you need<br>to do your best work.
+        </h2>
+
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 1.25rem;">
+
+          <li style="display: flex; gap: 1rem; align-items: flex-start;">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-top: 6px; flex-shrink: 0; color: var(--gold);">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 500; margin-bottom: 2px; color: var(--text);">Professional video studio, on-site</p>
+              <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Film your keynotes, your social content, your next idea — included in your membership through a partnered production studio.</p>
+            </div>
+          </li>
+
+          <li style="display: flex; gap: 1rem; align-items: flex-start;">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-top: 6px; flex-shrink: 0; color: var(--gold);">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 500; margin-bottom: 2px; color: var(--text);">Social media production</p>
+              <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">The studio team is there. You consult, they build a plan, it gets made. No extra invoices.</p>
+            </div>
+          </li>
+
+          <li style="display: flex; gap: 1rem; align-items: flex-start;">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-top: 6px; flex-shrink: 0; color: var(--gold);">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 500; margin-bottom: 2px; color: var(--text);">Physical access to the space</p>
+              <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Stay there. Use it as an office. Host a client meeting. Book a room for the weekend. It's yours.</p>
+            </div>
+          </li>
+
+          <li style="display: flex; gap: 1rem; align-items: flex-start;">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-top: 6px; flex-shrink: 0; color: var(--gold);">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 500; margin-bottom: 2px; color: var(--text);">Run your own retreats</p>
+              <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Bring up to three guests. They pay you directly. The space is the backdrop. Most members recoup their membership this way.</p>
+            </div>
+          </li>
+
+          <li style="display: flex; gap: 1rem; align-items: flex-start;">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-top: 6px; flex-shrink: 0; color: var(--gold);">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 500; margin-bottom: 2px; color: var(--text);">Drew's presence</p>
+              <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Speaker coaching, fireside conversations, idea-bouncing at 11pm if that's when it hits. He's there. You have to come to him.</p>
+            </div>
+          </li>
+
+          <li style="display: flex; gap: 1rem; align-items: flex-start;">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-top: 6px; flex-shrink: 0; color: var(--gold);">
+              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 500; margin-bottom: 2px; color: var(--text);">Five questions per visit</p>
+              <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Every time you arrive, you answer five questions in front of a camera. The Gathering Place uses the best one. It's part of the culture.</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- Right: photos -->
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="ratio-4-3">
+          <img
+            src="https://images.unsplash.com/photo-1554906493-4812e307243d?w=1000&q=85&fit=crop&auto=format"
+            alt="Grand library interior — floor-to-ceiling bookshelves"
+            loading="lazy"
+          />
+        </div>
+        <div class="ratio-16-9">
+          <img
+            src="https://images.unsplash.com/photo-1485579149621-3123dd979885?w=1000&q=85&fit=crop&auto=format"
+            alt="Professional condenser microphone — on-site studio"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     7. THE LOCATIONS
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg2);">
+  <div class="container-lg">
+    <p class="label" style="margin-bottom: 1rem;">Where We'll Be</p>
+
+    <h2 class="h-md" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 1rem; color: var(--text);">
+      The Gathering Place<br>is not one place.
+    </h2>
+
+    <p style="margin-bottom: 4rem; font-size: 1rem; line-height: 1.625; color: var(--muted); max-width: 480px;">
+      The first year is a beta. We move with the seasons, the energy, and what feels right. Members follow. Or drop in where it works for them.
+    </p>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="timeline-line"></div>
+
+      <!-- Stop 1: Forest Hill Toronto -->
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--gold);"></div>
+        <div style="flex: 1; min-width: 0;">
+          <p style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 0.25rem; color: var(--gold);">February 2026</p>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text);">Forest Hill, Toronto</h3>
+          <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Pilot Week — Feb 15–20. The first gathering. Invite only.</p>
+        </div>
+        <div class="timeline-thumb">
+          <img src="https://images.unsplash.com/photo-1636572644856-219441002f7f?w=400&q=80&fit=crop&auto=format" alt="Intimate candlelit room" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- Stop 2: Toronto permanent home -->
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--gold);"></div>
+        <div style="flex: 1; min-width: 0;">
+          <p style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 0.25rem; color: var(--gold);">April – May 2026</p>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text);">Toronto (Permanent Home)</h3>
+          <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">A permanent base in the city. The club finds its heartbeat.</p>
+        </div>
+        <div class="timeline-thumb">
+          <img src="https://images.unsplash.com/photo-1717497043515-9e062f65ca3f?w=400&q=80&fit=crop&auto=format" alt="Fireplace interior, warm amber light" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- Stop 3: The Kawarthas -->
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--gold);"></div>
+        <div style="flex: 1; min-width: 0;">
+          <p style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 0.25rem; color: var(--gold);">May – October 2026</p>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text);">The Kawarthas, Ontario</h3>
+          <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">A family cottage, lost to bankruptcy twenty years ago, taken back. Summer in the trees.</p>
+        </div>
+        <div class="timeline-thumb">
+          <img src="https://images.unsplash.com/photo-1629872874038-b1d600221640?w=400&q=80&fit=crop&auto=format" alt="Wooden dock on a still lake, Ontario cottage country" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- Stop 4: The Icon Toronto -->
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--gold);"></div>
+        <div style="flex: 1; min-width: 0;">
+          <p style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 0.25rem; color: var(--gold);">November 2026</p>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text);">The Icon, Toronto</h3>
+          <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Back to the city for late fall.</p>
+        </div>
+        <div class="timeline-thumb">
+          <img src="https://images.unsplash.com/photo-1554906493-4812e307243d?w=400&q=80&fit=crop&auto=format" alt="Grand interior — The Icon, Toronto" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- Stop 5: Barbados -->
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--gold);"></div>
+        <div style="flex: 1; min-width: 0;">
+          <p style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 0.25rem; color: var(--gold);">January – March 2027</p>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text);">Barbados</h3>
+          <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Warm. Quiet. Writers and speakers need this.</p>
+        </div>
+        <div class="timeline-thumb">
+          <img src="https://images.unsplash.com/photo-1762254794468-1fb6fa893f73?w=400&q=80&fit=crop&auto=format" alt="Tropical ocean-view villa, Barbados" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- Stop 6: Cape Breton (future) -->
+      <div class="timeline-item" style="border-bottom: none;">
+        <div class="timeline-dot" style="background: var(--bg); border: 1px solid var(--muted3);"></div>
+        <div style="flex: 1; min-width: 0;">
+          <p style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 0.25rem; color: var(--muted3);">Future</p>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--muted2);">Cape Breton, Nova Scotia</h3>
+          <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">A cliff overlooking the ocean, outside Chéticamp. Reserved for founding members.</p>
+        </div>
+        <div class="timeline-thumb" style="opacity: 0.4;">
+          <img src="https://images.unsplash.com/photo-1755026420799-7d476a5d5ae8?w=400&q=80&fit=crop&auto=format" alt="Dramatic Atlantic coastal cliffs, Cape Breton" loading="lazy" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     8. THE GREEN ROOM
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg);">
+  <div class="container-md">
+    <div style="padding: 3rem; border-radius: 2px; background: #0f0d0b; border: 1px solid var(--muted4); border-top: 2px solid #4a3822;">
+      <p style="margin-bottom: 1rem; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3em; color: #7c6040;">
+        The Green Room at The Gathering Place
+      </p>
+
+      <h2 class="h-sm" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 1.5rem; color: var(--gold2);">
+        For speakers.<br>By invitation only.
+      </h2>
+
+      <div style="color: var(--muted2); font-size: 1rem; line-height: 1.75; display: flex; flex-direction: column; gap: 1.25rem;">
+        <p>Inside The Gathering Place is a sub-community called The Green Room. It's designed specifically for professional speakers — but not exclusively for them. The speakers need to be in rooms with writers and designers and coaches. The work gets better when the room isn't all one thing.</p>
+        <p>The Green Room won't be advertised. It won't have a page. It will spread the way all good rooms spread — by word of mouth, from the people inside it.</p>
+        <p style="font-style: italic; color: #7c6040;">Not a place you sign up for. A place you're asked into.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     9. THE FOUNDING COHORT
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg2);">
+  <div class="container-sm">
+    <p class="label" style="margin-bottom: 1rem;">Year One</p>
+
+    <h2 class="h-lg" style="font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 2.5rem; color: var(--text);">
+      Twelve seats.<br>That's it.
+    </h2>
+
+    <div style="color: var(--muted); font-size: 1rem; line-height: 1.75; display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 3rem;">
+      <p>The founding cohort is being assembled by hand. Drew is reaching out to the people he's had 2.5-hour first calls with — the ones he never needed to explain himself to. There's no application. There's no open enrollment. There's a conversation, and then there's an invitation.</p>
+      <p>If four of those twelve seats don't fill with the right people, they stay empty. The seat is worth more than the revenue.</p>
+      <p>These are the people Drew is going to be living alongside for a year. The room he builds in year one is the room he wants to be in.</p>
+    </div>
+
+    <blockquote style="margin-bottom: 3rem; font-size: 1.125rem; font-style: italic; line-height: 1.625; color: var(--gold2); border-left: 2px solid var(--gold); padding-left: 1.5rem;">
+      "The cost is non-negotiable. The terms are completely flexible."
+    </blockquote>
+
+    <div style="padding: 2rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4);">
+      <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-weight: 700; font-size: 3rem; color: var(--text); letter-spacing: -0.03em;">$2,500</span>
+        <span style="font-size: 1rem; color: var(--muted2);">/ month</span>
+      </div>
+      <p style="font-size: 0.875rem; color: var(--muted2); line-height: 1.625;">
+        ~$30,000 / year. Founding member terms available.<br>
+        If you can make $20,000 in new business using this space in a year, it pays for itself.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     10. WHO THIS IS FOR
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg);">
+  <div class="container-sm">
+    <p class="label" style="margin-bottom: 1rem;">Is This For You?</p>
+
+    <h2 class="h-sm" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 3rem; color: var(--text);">
+      You've had a 2.5-hour first call<br>with a stranger and loved every second.
+    </h2>
+
+    <ul style="list-style: none; display: flex; flex-direction: column; gap: 1.25rem;">
+
+      <li style="display: flex; gap: 1rem; align-items: flex-start; font-size: 1rem; line-height: 1.625; color: var(--muted);">
+        <span style="width: 20px; height: 1px; background: var(--gold); flex-shrink: 0; margin-top: 12px; display: block;"></span>
+        You're a speaker, coach, writer, or designer — a creative who's also running a business.
+      </li>
+
+      <li style="display: flex; gap: 1rem; align-items: flex-start; font-size: 1rem; line-height: 1.625; color: var(--muted);">
+        <span style="width: 20px; height: 1px; background: var(--gold); flex-shrink: 0; margin-top: 12px; display: block;"></span>
+        You present a polished version of yourself to the world. You need somewhere to take it off.
+      </li>
+
+      <li style="display: flex; gap: 1rem; align-items: flex-start; font-size: 1rem; line-height: 1.625; color: var(--muted);">
+        <span style="width: 20px; height: 1px; background: var(--gold); flex-shrink: 0; margin-top: 12px; display: block;"></span>
+        You're looking for depth, not networking. Fewer people, longer conversations.
+      </li>
+
+      <li style="display: flex; gap: 1rem; align-items: flex-start; font-size: 1rem; line-height: 1.625; color: var(--muted);">
+        <span style="width: 20px; height: 1px; background: var(--gold); flex-shrink: 0; margin-top: 12px; display: block;"></span>
+        You're at a level where the room around you matters. The ceiling has to be higher than you.
+      </li>
+
+      <li style="display: flex; gap: 1rem; align-items: flex-start; font-size: 1rem; line-height: 1.625; color: var(--muted);">
+        <span style="width: 20px; height: 1px; background: var(--gold); flex-shrink: 0; margin-top: 12px; display: block;"></span>
+        You want to be around people whose minds work differently than yours — and who don't need an explanation.
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     11. FAQ
+────────────────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--bg2);">
+  <div class="container-sm">
+    <p class="label" style="margin-bottom: 1rem;">Questions</p>
+
+    <h2 class="h-md" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 4rem; color: var(--text);">
+      The things people<br>always ask.
+    </h2>
+
+    <div>
+
+      <div class="faq-item">
+        <h3 style="font-weight: 600; font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; color: var(--text);">Do I have to attend every location?</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">No. You choose where it works for you. Some members will follow the whole year. Others will drop in for two or three stops. The membership travels with you.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 style="font-weight: 600; font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; color: var(--text);">Do I have to be a professional speaker to join?</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">No. The Gathering Place is for creatives running businesses — speakers, coaches, writers, designers. The room works better when it's not all one thing. The Green Room, inside it, is specifically for speakers.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 style="font-weight: 600; font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; color: var(--text);">How long is the commitment?</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Year one is a beta. The cost is month-to-month. Founding member terms are available for those who want to structure it differently. The cost is non-negotiable. The terms are completely flexible.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 style="font-weight: 600; font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; color: var(--text);">What's the process to join?</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">There is no application. Drew is reaching out directly to the people he wants in the room. If you found your way here, reach out. If it feels right, there'll be a conversation. If that conversation goes well, there'll be an invitation.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 style="font-weight: 600; font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; color: var(--text);">Can I bring guests or host my own events there?</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Yes — members can bring up to three guests for private retreats. They pay you. The space is the backdrop. Many members cover their membership cost this way.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 style="font-weight: 600; font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; color: var(--text);">What if it turns out not to be the right fit?</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">That's why the selection conversation exists. Drew isn't looking to fill seats. He's looking to build a room he wants to live in. If it's not right, it's a short conversation before you join — not after.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 style="font-weight: 600; font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; color: var(--text);">What does Drew actually do at The Gathering Place?</h3>
+        <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">He's there. Not as a coach you have to book, not as a speaker giving a talk. He's available for speaker coaching, idea conversations, and fireside sessions. But you have to come to him. The space is not a programme. It's a room with a person in it who finds you genuinely interesting.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     12. EXPRESSION OF INTEREST
+────────────────────────────────────────────────────────────────── -->
+<section id="invitation" class="section" style="background: var(--bg);">
+  <div style="max-width: 36rem; margin: 0 auto; text-align: center;">
+    <p class="label" style="margin-bottom: 1rem;">Request an Invitation</p>
+
+    <h2 class="h-md" style="font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 1.5rem; color: var(--text);">
+      We're not taking applications.<br>We're having conversations.
+    </h2>
+
+    <p style="margin-bottom: 3rem; font-size: 1rem; line-height: 1.625; color: var(--muted);">
+      If something here resonated, reach out. Tell Drew who you are and why you think you'd be a good fit for the room. That's it.
+    </p>
+
+    <div style="padding: 2rem; border-radius: 2px; background: var(--bg3); border: 1px solid var(--muted4); text-align: left;">
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; color: var(--muted2);">Your Name</label>
+          <input type="text" placeholder="Full name" />
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; color: var(--muted2);">Your Email</label>
+          <input type="email" placeholder="you@yourwork.com" />
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; color: var(--muted2);">Why You'd Be a Good Fit</label>
+          <textarea rows="4" placeholder="Tell Drew about yourself and why The Gathering Place makes sense for you right now."></textarea>
+        </div>
+
+        <a
+          href="mailto:drew@dayoneleadership.com?subject=The%20Gathering%20Place%20%E2%80%94%20Expression%20of%20Interest"
+          class="btn-gold-block"
+        >
+          Start the Conversation
+        </a>
+
+        <p style="font-size: 0.75rem; text-align: center; color: var(--muted3);">
+          This opens an email to Drew directly at drew@dayoneleadership.com
+        </p>
+
+      </div>
+    </div>
+
+    <p style="margin-top: 2rem; font-size: 0.75rem; color: var(--muted3);">
+      The Gathering Place is in beta. The founding cohort is forming now.
+    </p>
+  </div>
+</section>
+
+
+<!-- ────────────────────────────────────────────────────────────────
+     13. FOOTER
+────────────────────────────────────────────────────────────────── -->
+<footer style="padding: 3rem 1.5rem; text-align: center; background: var(--bg); border-top: 1px solid var(--muted5);">
+  <p style="font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.5rem; color: var(--muted3);">
+    The Gathering Place
+  </p>
+  <p style="font-size: 0.75rem; color: var(--muted4);">A Drew Dudley project.</p>
+</footer>
+
+</body>
+</html>

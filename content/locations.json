@@ -1,0 +1,50 @@
+[
+  {
+    "id": "forest-hill-toronto-pilot",
+    "name": "Forest Hill, Toronto",
+    "region": "Toronto, Ontario",
+    "period": "Feb 15–20, 2026",
+    "status": "pilot",
+    "notes": "Pilot week. Invite-only drop-in. The first real gathering — proving the concept in a room before anything goes public."
+  },
+  {
+    "id": "toronto-home",
+    "name": "Toronto (Permanent Home)",
+    "region": "Toronto, Ontario",
+    "period": "April – mid May 2026",
+    "status": "upcoming",
+    "notes": "A property Drew made an offer on as of early 2026. If the offer comes through, this becomes the base of operations."
+  },
+  {
+    "id": "kawarthas",
+    "name": "The Kawarthas",
+    "region": "Kawarthas, Ontario",
+    "period": "May – October 2026",
+    "status": "upcoming",
+    "notes": "A cottage his family lost to bankruptcy 20 years ago that he swore he would one day buy back. It became available."
+  },
+  {
+    "id": "toronto-fall",
+    "name": "The Icon, Toronto",
+    "region": "Toronto, Ontario",
+    "period": "November 2026",
+    "status": "upcoming",
+    "notes": "Return to the city for late fall."
+  },
+  {
+    "id": "barbados",
+    "name": "Barbados",
+    "region": "Barbados",
+    "period": "January – March 2027",
+    "status": "future",
+    "notes": "A property Drew has access to. The winter residency."
+  },
+  {
+    "id": "cape-breton",
+    "name": "Cape Breton, Nova Scotia",
+    "region": "Cape Breton Island, Nova Scotia",
+    "period": "TBD",
+    "status": "future",
+    "notes": "A property on a cliff overlooking the ocean outside Chéticamp. Planned as the permanent inner-circle home for founding members."
+  }
+]
