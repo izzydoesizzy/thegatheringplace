@@ -206,15 +206,11 @@
 ────────────────────────────────────────────────────────────────── -->
 <section style="position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; overflow: hidden;">
 
-  <!-- Fire background -->
-  <div style="position: absolute; inset: 0;">
-    <img
-      src="https://images.unsplash.com/photo-1618325508550-951512a1e82d?w=1920&q=80&fit=crop&auto=format"
-      alt=""
-      aria-hidden="true"
-      style="width: 100%; height: 100%; object-fit: cover; opacity: 0.45;"
-    />
-    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(12,10,8,0.55) 0%, rgba(12,10,8,0.2) 40%, rgba(12,10,8,0.7) 100%);"></div>
+  <!-- Animated fire canvas background -->
+  <div style="position: absolute; inset: 0; background: #0c0a08;">
+    <canvas id="fire-canvas" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%;"></canvas>
+    <div style="position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(12,10,8,0.72) 0%, rgba(12,10,8,0.1) 40%, rgba(12,10,8,0.5) 80%, rgba(12,10,8,0.85) 100%);"></div>
+    <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 100% at 50% 100%, transparent 0%, rgba(12,10,8,0.6) 100%);"></div>
   </div>
 
   <!-- Content -->
@@ -277,8 +273,8 @@
       <div class="order-2" style="position: relative;">
         <div class="ratio-4-3" style="position: relative;">
           <img
-            src="https://images.unsplash.com/photo-1676063258992-1562bbecb583?w=1200&q=85&fit=crop&auto=format"
-            alt="Speaker on stage under dramatic spotlight"
+            src="https://www.drewdudley.com/wp-content/uploads/2021/10/Drew_Home_Page_2.jpg"
+            alt="Drew Dudley — founder of The Gathering Place, professional speaker"
             loading="lazy"
           />
           <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(12,10,8,0.5) 0%, transparent 50%);"></div>
@@ -544,7 +540,7 @@
           <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Pilot Week — Feb 15–20. The first gathering. Invite only.</p>
         </div>
         <div class="timeline-thumb">
-          <img src="https://images.unsplash.com/photo-1636572644856-219441002f7f?w=400&q=80&fit=crop&auto=format" alt="Intimate candlelit room" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1761767274100-b7bad43be8cf?w=400&q=80&fit=crop&auto=format" alt="Grand manor estate — Forest Hill, Toronto" loading="lazy" />
         </div>
       </div>
 
@@ -557,7 +553,7 @@
           <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">A permanent base in the city. The club finds its heartbeat.</p>
         </div>
         <div class="timeline-thumb">
-          <img src="https://images.unsplash.com/photo-1717497043515-9e062f65ca3f?w=400&q=80&fit=crop&auto=format" alt="Fireplace interior, warm amber light" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1700402889708-6090a296ad42?w=400&q=80&fit=crop&auto=format" alt="Moody exposed-brick creative loft — Toronto studio" loading="lazy" />
         </div>
       </div>
 
@@ -583,7 +579,7 @@
           <p style="font-size: 0.875rem; line-height: 1.625; color: var(--muted2);">Back to the city for late fall.</p>
         </div>
         <div class="timeline-thumb">
-          <img src="https://images.unsplash.com/photo-1554906493-4812e307243d?w=400&q=80&fit=crop&auto=format" alt="Grand interior — The Icon, Toronto" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1693520016313-e129d398a467?w=400&q=80&fit=crop&auto=format" alt="Dimly lit cocktail lounge with chandelier — The Icon, Toronto" loading="lazy" />
         </div>
       </div>
 
@@ -836,6 +832,129 @@
   </p>
   <p style="font-size: 0.75rem; color: var(--muted4);">A Drew Dudley project.</p>
 </footer>
+
+
+<!-- ── Fire Canvas Animation ──────────────────────────────────────────────────
+     Classic demoscene fire algorithm: seeds bottom row with random heat,
+     propagates upward with slight decay. Rendered at 1/3 resolution, scaled
+     up for natural softness. Color palette matches the amber/ember tone.
+──────────────────────────────────────────────────────────────────────────── -->
+<script>
+(function () {
+  var canvas = document.getElementById('fire-canvas');
+  if (!canvas) return;
+
+  var running = true;
+  var animId;
+
+  function init() {
+    var W = Math.floor(canvas.offsetWidth / 3);
+    var H = Math.floor(canvas.offsetHeight / 3);
+    if (W < 1 || H < 1) return;
+
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    var ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+
+    // Temperature buffer
+    var buf = new Uint8Array(W * H);
+
+    // Fire color palette — 0=transparent, rising through ember/amber/gold/white
+    var pal = new Uint8ClampedArray(256 * 4);
+    for (var i = 0; i < 256; i++) {
+      var r, g, b, a;
+      if (i < 20) {
+        r = 0; g = 0; b = 0; a = 0;
+      } else if (i < 80) {
+        var t = (i - 20) / 60;
+        r = Math.floor(60 + t * 80);
+        g = Math.floor(10 + t * 20);
+        b = 0;
+        a = Math.floor(t * 200);
+      } else if (i < 160) {
+        var t = (i - 80) / 80;
+        r = Math.floor(140 + t * 115);
+        g = Math.floor(30 + t * 90);
+        b = 0;
+        a = 220;
+      } else if (i < 220) {
+        var t = (i - 160) / 60;
+        r = 255;
+        g = Math.floor(120 + t * 100);
+        b = Math.floor(t * 40);
+        a = 240;
+      } else {
+        var t = (i - 220) / 35;
+        r = 255;
+        g = Math.floor(220 + t * 35);
+        b = Math.floor(40 + t * 120);
+        a = 255;
+      }
+      pal[i * 4]     = r;
+      pal[i * 4 + 1] = g;
+      pal[i * 4 + 2] = b;
+      pal[i * 4 + 3] = a;
+    }
+
+    var offscreen = document.createElement('canvas');
+    offscreen.width  = W;
+    offscreen.height = H;
+    var octx = offscreen.getContext('2d');
+    var imageData = octx.createImageData(W, H);
+
+    function tick() {
+      if (!running) return;
+
+      // Seed bottom rows with varying heat
+      for (var x = 0; x < W; x++) {
+        var heat = Math.random() > 0.15
+          ? Math.floor(180 + Math.random() * 75)
+          : Math.floor(Math.random() * 100);
+        buf[(H - 1) * W + x] = heat;
+        if (Math.random() > 0.3) {
+          buf[(H - 2) * W + x] = Math.floor(heat * 0.9);
+        }
+      }
+
+      // Propagate fire upward
+      for (var y = 1; y < H - 1; y++) {
+        for (var x = 0; x < W; x++) {
+          var below   = buf[(y + 1) * W + x];
+          var belowL  = buf[(y + 1) * W + Math.max(0, x - 1)];
+          var belowR  = buf[(y + 1) * W + Math.min(W - 1, x + 1)];
+          var current = buf[y * W + x];
+          var avg = (below + belowL + belowR + current) >> 2;
+          buf[y * W + x] = Math.max(0, avg - Math.floor(Math.random() * 3));
+        }
+      }
+
+      // Render to offscreen image data
+      for (var i = 0; i < W * H; i++) {
+        var v  = buf[i];
+        var pi = i * 4;
+        imageData.data[pi]     = pal[v * 4];
+        imageData.data[pi + 1] = pal[v * 4 + 1];
+        imageData.data[pi + 2] = pal[v * 4 + 2];
+        imageData.data[pi + 3] = pal[v * 4 + 3];
+      }
+      octx.putImageData(imageData, 0, 0);
+
+      // Scale up to full canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
+
+      animId = requestAnimationFrame(tick);
+    }
+
+    tick();
+  }
+
+  // Small delay to let the DOM settle before reading offsetWidth/Height
+  setTimeout(init, 50);
+})();
+</script>
 
 </body>
 </html>
