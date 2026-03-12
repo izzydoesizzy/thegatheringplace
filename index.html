@@ -206,10 +206,18 @@
 ────────────────────────────────────────────────────────────────── -->
 <section style="position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; overflow: hidden;">
 
-  <!-- Animated fire canvas background -->
+  <!-- Hero background: Veo 2 fireplace video (primary) + canvas fire (fallback) -->
   <div style="position: absolute; inset: 0; background: #0c0a08;">
+    <!-- Video background — loops silently. Falls back to canvas on error. -->
+    <video id="hero-video" autoplay muted loop playsinline aria-hidden="true"
+      style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.65; display: none;"
+      oncanplay="document.getElementById('fire-canvas').style.display='none'; this.style.display='block';"
+      onerror="this.style.display='none'; document.getElementById('fire-canvas').style.display='block';">
+      <source src="content/brand/hero-fire.mp4" type="video/mp4">
+    </video>
+    <!-- Canvas fire animation (runs immediately while video loads, hides on canplay) -->
     <canvas id="fire-canvas" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%;"></canvas>
-    <div style="position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(12,10,8,0.72) 0%, rgba(12,10,8,0.1) 40%, rgba(12,10,8,0.5) 80%, rgba(12,10,8,0.85) 100%);"></div>
+    <div style="position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(12,10,8,0.75) 0%, rgba(12,10,8,0.1) 40%, rgba(12,10,8,0.5) 80%, rgba(12,10,8,0.88) 100%);"></div>
     <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 100% at 50% 100%, transparent 0%, rgba(12,10,8,0.6) 100%);"></div>
   </div>
 
