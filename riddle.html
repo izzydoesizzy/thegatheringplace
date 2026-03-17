@@ -159,25 +159,37 @@
       color: #374151;
     }
 
+    /* ── Keyhole symbol ──────────────────────────────── */
+
+    .keyhole {
+      display: flex;
+      justify-content: center;
+      margin-bottom: clamp(1rem, 2.5vmin, 1.8rem);
+      color: #d4af37;
+      opacity: 0.5;
+      transition: opacity 1s ease;
+    }
+
+    body.unlocked .keyhole { opacity: 1; }
+
+    /* ── Sound hint ──────────────────────────────────── */
+
     .sound-hint {
-      position: fixed;
-      bottom: clamp(1rem, 3vmin, 1.5rem);
-      right: clamp(1rem, 3vmin, 1.5rem);
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       color: #4b5563;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      margin-bottom: clamp(0.6rem, 1.5vmin, 1rem);
       opacity: 1;
       transition: opacity 0.8s ease;
       pointer-events: none;
     }
 
     .sound-hint.hidden { opacity: 0; }
-
-    .sound-hint svg { opacity: 0.5; }
 
     @keyframes pulse {
       0%, 100% { opacity: 0.4; }
@@ -190,20 +202,26 @@
 
 <body>
   <div class="gate-frame">
-    <p class="subtitle top-subtitle" id="greeting"></p>
+    <div class="keyhole">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="10" r="4" />
+        <path d="M10 13.5L9 20h6l-1-6.5" />
+      </svg>
+    </div>
+
+    <div class="sound-hint" id="sound-hint">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+      </svg>
+      <span>Sound on</span>
+    </div>
+
     <div class="inscription" id="inscription"></div>
     <p class="feedback" id="feedback">&nbsp;</p>
   </div>
   <p class="bottom-subtitle">The Gathering Place</p>
-
-  <div class="sound-hint" id="sound-hint">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-    </svg>
-    <span>Sound on</span>
-  </div>
 
   <script>
     // ── Config ───────────────────────────────────────────────────────────────
