@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enter — The Gathering Place</title>
+  <meta name="description" content="Find the way in." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a0a;
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background 1s ease;
+    }
+
+    body.unlocked {
+      background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
+    }
+
+    /* ── Gate frame ──────────────────────────────────── */
+
+    .gate-frame {
+      border: 1px solid rgba(107, 114, 128, 0.15);
+      border-radius: 12px;
+      padding: clamp(1.2rem, 3vmin, 2.5rem) clamp(1.5rem, 4vmin, 2.5rem);
+      transition: all 1s ease;
+      position: relative;
+      max-height: 85vh;
+    }
+
+    .gate-frame::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(107, 114, 128, 0.3), transparent);
+      border-radius: 2px;
+      transition: all 1s ease;
+    }
+
+    body.unlocked .gate-frame {
+      box-shadow: 0 0 60px rgba(212, 175, 55, 0.3), inset 0 0 40px rgba(212, 175, 55, 0.1);
+      border-color: rgba(212, 175, 55, 0.4);
+    }
+
+    body.unlocked .gate-frame::before {
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+      width: 100px;
+    }
+
+    /* ── Inscription ─────────────────────────────────── */
+
+    .inscription {
+      color: #6b7280;
+      font-size: clamp(0.9rem, 2.2vmin, 1.2rem);
+      line-height: 1.9;
+      text-align: center;
+      max-width: 480px;
+      letter-spacing: 0.02em;
+      transition: opacity 0.8s ease;
+    }
+
+    body.unlocked .inscription { opacity: 0; }
+
+    .inscription p { margin: 0; }
+
+    .stanza-break { height: clamp(0.3rem, 1vmin, 0.6rem); }
+
+    .word {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-block;
+      padding: 0 1px;
+      border-radius: 2px;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .word:hover {
+      color: #d4af37;
+      text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+    }
+
+    .word:active { transform: scale(0.95); }
+
+    .word.shake {
+      animation: wordShake 0.5s ease;
+    }
+
+    @keyframes wordShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-3px); }
+      40% { transform: translateX(3px); }
+      60% { transform: translateX(-2px); }
+      80% { transform: translateX(2px); }
+    }
+
+    /* ── Feedback ─────────────────────────────────────── */
+
+    .feedback {
+      font-style: italic;
+      font-size: clamp(0.8rem, 1.8vmin, 0.95rem);
+      min-height: 1.4rem;
+      transition: all 0.4s ease;
+      letter-spacing: 0.03em;
+      text-align: center;
+      margin-top: clamp(0.8rem, 2vmin, 1.2rem);
+      color: transparent;
+    }
+
+    .feedback.wrong {
+      color: #c4a882;
+      text-shadow: 0 0 10px rgba(196, 168, 130, 0.25);
+    }
+
+    .feedback.success {
+      color: #d4af37;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+      font-size: clamp(0.9rem, 2vmin, 1.1rem);
+      font-style: normal;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Subtitle / footer ───────────────────────────── */
+
+    .subtitle {
+      color: #4b5563;
+      font-size: clamp(0.6rem, 1.4vmin, 0.8rem);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .top-subtitle { margin-bottom: clamp(0.8rem, 2vmin, 1.2rem); }
+
+    .bottom-subtitle {
+      margin-top: clamp(1rem, 3vmin, 1.5rem);
+      font-size: 0.6rem;
+      color: #374151;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="gate-frame">
+    <p class="subtitle top-subtitle" id="greeting"></p>
+    <div class="inscription" id="inscription"></div>
+    <p class="feedback" id="feedback">&nbsp;</p>
+  </div>
+  <p class="bottom-subtitle">The Gathering Place</p>
+
+  <script>
+    // ── Config ───────────────────────────────────────────────────────────────
+    // The answer is hashed so it's not immediately visible in source.
+    // SHA-256 of "friend" (lowercase, no punctuation).
+    const ANSWER_HASH = "4d328e08e4e7580011df3de8a3cc88f68bfee18fe4bb40e3fe7c3f52df833a43";
+
+    const LINES = [
+      "Many have come to these doors.",
+      "They spoke of truth, of wisdom, of power.",
+      "They offered keys forged in certainty",
+      "and secrets pulled from the deep.",
+      "",
+      "The doors did not move.",
+      "",
+      "One night a wanderer sat here,",
+      "tired, asking nothing.",
+      "A friend passing through",
+      "said only a quiet hello \u2014",
+      "and the stone gave way.",
+      "",
+      "What opened them",
+      "was never what you\u2019d think to try.",
+    ];
+
+    const COLD = [
+      "The stone remains cold and silent.",
+      "That word echoes into nothing.",
+      "The doors do not stir.",
+      "A whisper fades into the dark.",
+      "The walls absorb your words without reply.",
+      "Nothing happens.",
+    ];
+    const WARM = [
+      "You\u2019re reading the words. Try reading the story.",
+      "It wasn\u2019t what was said. It was who was there.",
+      "The answer is not a thing. It\u2019s a presence.",
+      "Listen to the tale, not the vocabulary.",
+    ];
+    const HOT = [
+      "The wanderer didn\u2019t open the door. Someone else did.",
+      "Not the greeting. The greeter.",
+      "Who walked through that night?",
+    ];
+
+    // Redirect URL after unlock (change to your members-only URL)
+    const REDIRECT_URL = "index.html";
+
+    // ── State ────────────────────────────────────────────────────────────────
+    let guessCount = 0;
+    let unlocked = false;
+    let audioStarted = false;
+    let audioCtx = null;
+    let ambientGains = [];
+
+    // ── SHA-256 helper ───────────────────────────────────────────────────────
+    async function sha256(text) {
+      const data = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    // ── Audio ────────────────────────────────────────────────────────────────
+    function getCtx() {
+      if (!audioCtx) audioCtx = new AudioContext();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      return audioCtx;
+    }
+
+    function startDrone() {
+      if (audioStarted) return;
+      audioStarted = true;
+      const ctx = getCtx();
+
+      const gain = ctx.createGain();
+      gain.gain.value = 0;
+      gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 3);
+      gain.connect(ctx.destination);
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 200;
+      filter.Q.value = 1;
+      filter.connect(gain);
+
+      const o1 = ctx.createOscillator();
+      o1.type = "sine"; o1.frequency.value = 55; o1.connect(filter); o1.start();
+
+      const o2 = ctx.createOscillator();
+      o2.type = "sine"; o2.frequency.value = 55.5; o2.connect(filter); o2.start();
+
+      const sg = ctx.createGain();
+      sg.gain.value = 0;
+      sg.gain.linearRampToValueAtTime(0.012, ctx.currentTime + 5);
+      sg.connect(ctx.destination);
+
+      const o3 = ctx.createOscillator();
+      o3.type = "sine"; o3.frequency.value = 440; o3.connect(sg); o3.start();
+
+      ambientGains = [gain, sg];
+    }
+
+    function playWrong() {
+      const ctx = getCtx();
+
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.15, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      g.connect(ctx.destination);
+
+      const o = ctx.createOscillator();
+      o.type = "sine";
+      o.frequency.setValueAtTime(80, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.3);
+      o.connect(g); o.start(); o.stop(ctx.currentTime + 0.5);
+
+      // Noise burst
+      const len = ctx.sampleRate * 0.15;
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * 0.3;
+      const n = ctx.createBufferSource(); n.buffer = buf;
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(0.08, ctx.currentTime);
+      ng.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      const nf = ctx.createBiquadFilter(); nf.type = "lowpass"; nf.frequency.value = 150;
+      n.connect(nf); nf.connect(ng); ng.connect(ctx.destination); n.start();
+    }
+
+    function playSuccess() {
+      const ctx = getCtx();
+
+      // Fade out drone
+      for (const g of ambientGains) {
+        g.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.5);
+      }
+
+      // Ascending C major chord
+      [261.63, 329.63, 392.0, 523.25, 659.25].forEach((freq, i) => {
+        const delay = i * 0.15;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, ctx.currentTime + delay);
+        g.gain.linearRampToValueAtTime(0.08, ctx.currentTime + delay + 0.2);
+        g.gain.linearRampToValueAtTime(0, ctx.currentTime + delay + 2.0);
+        g.connect(ctx.destination);
+        const o = ctx.createOscillator();
+        o.type = "sine"; o.frequency.value = freq;
+        o.connect(g); o.start(ctx.currentTime + delay); o.stop(ctx.currentTime + delay + 2.5);
+      });
+
+      // Shimmer
+      const sg = ctx.createGain();
+      sg.gain.setValueAtTime(0, ctx.currentTime + 0.3);
+      sg.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 0.6);
+      sg.gain.linearRampToValueAtTime(0, ctx.currentTime + 2.5);
+      sg.connect(ctx.destination);
+      const s = ctx.createOscillator();
+      s.type = "sine";
+      s.frequency.setValueAtTime(1318.5, ctx.currentTime + 0.3);
+      s.frequency.linearRampToValueAtTime(2637, ctx.currentTime + 2.0);
+      s.connect(sg); s.start(ctx.currentTime + 0.3); s.stop(ctx.currentTime + 2.5);
+    }
+
+    // ── Build the inscription DOM ────────────────────────────────────────────
+    const inscriptionEl = document.getElementById("inscription");
+    const feedbackEl = document.getElementById("feedback");
+
+    LINES.forEach(line => {
+      if (line === "") {
+        inscriptionEl.appendChild(document.createElement("div")).className = "stanza-break";
+        return;
+      }
+      const p = document.createElement("p");
+      line.split(/(\s+)/).forEach(segment => {
+        if (/^\s+$/.test(segment)) {
+          p.appendChild(document.createTextNode(segment));
+          return;
+        }
+        const span = document.createElement("span");
+        span.className = "word";
+        span.textContent = segment;
+        span.addEventListener("click", () => handleClick(span, segment));
+        p.appendChild(span);
+      });
+      inscriptionEl.appendChild(p);
+    });
+
+    // ── Click handler ────────────────────────────────────────────────────────
+    async function handleClick(el, raw) {
+      if (unlocked) return;
+
+      startDrone();
+
+      const clean = raw.replace(/[.,;:!?"'()\u2014\u2019]/g, "").toLowerCase();
+      if (!clean) return;
+
+      // Shake animation
+      el.classList.add("shake");
+      setTimeout(() => el.classList.remove("shake"), 600);
+
+      const hash = await sha256(clean);
+
+      if (hash === ANSWER_HASH) {
+        unlocked = true;
+        playSuccess();
+        document.body.classList.add("unlocked");
+        feedbackEl.className = "feedback success";
+        feedbackEl.textContent = "The doors open.";
+        setTimeout(() => { window.location.href = REDIRECT_URL; }, 2200);
+      } else {
+        playWrong();
+        guessCount++;
+        const pool = guessCount >= 8 ? HOT : guessCount >= 5 ? WARM : COLD;
+        feedbackEl.className = "feedback wrong";
+        feedbackEl.textContent = pool[Math.floor(Math.random() * pool.length)];
+      }
+    }
+  </script>
+</body>
+</html>
