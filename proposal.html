@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gathering Place — Proposal</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #4F46E5;
+    --accent-hover: #4338CA;
+    --accent-light: #E0E7FF;
+    --accent-bg: #EEF2FF;
+    --bg: #F9FAFB;
+    --bg-card: #FFFFFF;
+    --border: #E5E7EB;
+    --border-hover: #D1D5DB;
+    --text-1: #111827;
+    --text-2: #6B7280;
+    --text-3: #9CA3AF;
+    --green: #059669;
+    --green-bg: #ECFDF5;
+    --green-light: #D1FAE5;
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.07);
+    --shadow-lg: 0 12px 24px -4px rgba(0,0,0,0.1);
+    --radius: 8px;
+    --radius-sm: 6px;
+    --ease: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-1);
+    line-height: 1.6;
+    font-size: 0.9375rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { display: flex; max-width: 1060px; margin: 0 auto; min-height: 100vh; }
+  .main { flex: 1; max-width: 680px; padding: 48px 40px 80px; }
+  .side { width: 300px; flex-shrink: 0; }
+  .side-inner {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 48px 24px 32px; border-left: 1px solid var(--border);
+    background: var(--bg); display: flex; flex-direction: column;
+  }
+
+  /* ── Header ── */
+  .hdr { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .hdr h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.025em; color: var(--text-1); }
+  .hdr .tag { font-size: 0.9375rem; color: var(--text-2); margin-top: 2px; }
+  .hdr .meta { font-size: 0.8125rem; color: var(--text-3); margin-top: 4px; }
+
+  /* ── Narrative ── */
+  .narrative { margin-bottom: 32px; }
+  .narrative p { color: var(--text-2); margin-bottom: 8px; font-size: 0.9375rem; }
+
+  /* ── Section Labels ── */
+  .sec-label {
+    font-size: 0.6875rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-3); margin: 32px 0 8px; padding-left: 2px;
+  }
+
+  /* ── Separator ── */
+  .sep { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, var(--accent-bg) 0%, var(--bg) 60%);
+    margin: -48px -40px 0; padding: 48px 40px 32px;
+    border-bottom: 1px solid var(--border); margin-bottom: 32px;
+  }
+  .hero .hdr { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+  /* ── Preview Card Grid ── */
+  .preview-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-bottom: 12px;
+  }
+  .preview-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px;
+    cursor: pointer; transition: all 150ms var(--ease);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .preview-card:hover { border-color: var(--accent-light); box-shadow: var(--shadow-sm); }
+  .preview-card.active { border-color: var(--accent); background: var(--accent-bg); }
+  .preview-icon { width: 20px; height: 20px; color: var(--accent); margin-bottom: 6px; display: block; }
+  .preview-card-title { font-weight: 500; font-size: 0.8125rem; color: var(--text-1); display: block; }
+  .preview-card-sub { font-size: 0.6875rem; color: var(--text-3); display: block; margin-top: 2px; }
+  .preview-card-sub a { color: var(--accent); }
+  .preview-detail {
+    max-height: 0; overflow: hidden; transition: max-height 250ms var(--ease);
+    border-radius: var(--radius); margin-bottom: 4px;
+  }
+  .preview-detail.open { background: var(--bg-card); border: 1px solid var(--border); }
+  .preview-detail-inner {
+    padding: 14px 16px; font-size: 0.8125rem; color: var(--text-2); line-height: 1.6;
+  }
+  .preview-detail-inner a { color: var(--accent); }
+
+  /* ── Pills ── */
+  .pill {
+    display: inline-block; background: var(--accent-light); color: var(--accent);
+    font-size: 0.625rem; font-weight: 600; padding: 1px 7px; border-radius: 10px;
+    letter-spacing: 0.02em; vertical-align: middle; margin-left: 4px;
+    white-space: nowrap;
+  }
+  .pill-link {
+    display: inline-block; color: var(--accent); font-size: 0.625rem; font-weight: 600;
+    padding: 1px 7px; border-radius: 10px; border: 1px solid var(--accent-light);
+    text-decoration: none; white-space: nowrap; margin-left: 4px;
+    transition: background 150ms var(--ease);
+  }
+  .pill-link:hover { background: var(--accent-bg); text-decoration: none; }
+  .saved {
+    display: inline-block; background: var(--green-bg); color: var(--green);
+    font-size: 0.625rem; font-weight: 600; padding: 1px 7px; border-radius: 10px;
+    letter-spacing: 0.02em; white-space: nowrap; margin-left: 4px;
+  }
+
+  /* ═══ ROWS (the core interactive pattern) ═══ */
+  .row-group {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; margin-bottom: 8px;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .row {
+    border-bottom: 1px solid var(--border);
+    transition: background 150ms var(--ease);
+  }
+  .row:last-child { border-bottom: none; }
+  .row.selected { background: var(--accent-bg); }
+  .row.locked { background: var(--green-bg); }
+
+  .row-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .row-check {
+    appearance: none; -webkit-appearance: none;
+    width: 18px; height: 18px; min-width: 18px;
+    border: 1.5px solid var(--border-hover); border-radius: 5px;
+    cursor: pointer; position: relative; background: var(--bg-card);
+    transition: all 150ms var(--ease); margin-top: 1px; align-self: flex-start;
+  }
+  .row-check:hover { border-color: var(--accent); }
+  .row-check:checked { background: var(--accent); border-color: var(--accent); }
+  .row-check:checked::after {
+    content: ''; position: absolute; left: 4.5px; top: 1px;
+    width: 5px; height: 9px; border: solid white;
+    border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .row-check:disabled { background: var(--green); border-color: var(--green); cursor: default; }
+  .row-check:disabled::after {
+    content: ''; position: absolute; left: 4.5px; top: 1px;
+    width: 5px; height: 9px; border: solid white;
+    border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+
+  .row-info { flex: 1; min-width: 0; }
+  .row-title { font-weight: 500; font-size: 0.875rem; color: var(--text-1); display: block; }
+  .row-sub { font-size: 0.75rem; color: var(--text-3); margin-top: 1px; display: block; }
+  .row-hrs {
+    font-size: 0.6875rem; color: var(--text-3); font-weight: 500;
+    white-space: nowrap; align-self: flex-start; margin-top: 3px;
+  }
+  .row-price {
+    font-weight: 600; font-size: 0.8125rem; color: var(--accent);
+    font-variant-numeric: tabular-nums; white-space: nowrap; align-self: flex-start;
+    margin-top: 2px;
+  }
+  .row.locked .row-price { color: var(--green); }
+
+  .row-chevron {
+    width: 16px; height: 16px; color: var(--text-3);
+    transition: transform 200ms var(--ease); flex-shrink: 0;
+    align-self: flex-start; margin-top: 3px;
+  }
+  .row.expanded .row-chevron { transform: rotate(90deg); }
+
+  .row-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 250ms var(--ease);
+  }
+  .row-body-inner {
+    padding: 0 16px 14px 46px;
+    font-size: 0.8125rem; color: var(--text-2); line-height: 1.6;
+  }
+  .row-body-inner a { color: var(--accent); }
+  .row-body-inner .hook { color: var(--text-1); font-weight: 400; margin-bottom: 8px; }
+  .row-body-inner ul { list-style: none; padding: 0; margin: 0; }
+  .row-body-inner li {
+    padding: 2px 0 2px 14px; position: relative;
+  }
+  .row-body-inner li::before {
+    content: ''; position: absolute; left: 0; top: 10px;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--accent-light);
+  }
+  .market-note {
+    font-size: 0.6875rem; color: var(--text-3); font-style: italic;
+    margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border);
+  }
+
+  .bundle-badge {
+    display: inline-block; background: var(--accent); color: white;
+    font-size: 0.625rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 1px 6px; border-radius: 3px;
+    margin-left: 8px; vertical-align: middle;
+  }
+
+  /* ── Foundation Detail Groups ── */
+  .found-group { margin-bottom: 10px; }
+  .found-group h5 {
+    font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-3); font-weight: 500; margin-bottom: 2px;
+  }
+  .found-group ul { list-style: none; padding: 0; }
+  .found-group li {
+    font-size: 0.8125rem; color: var(--text-2); padding: 2px 0 2px 14px; position: relative;
+  }
+  .found-group li::before {
+    content: ''; position: absolute; left: 0; top: 10px;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--accent-light);
+  }
+
+  /* ── Headshot Counter ── */
+  .counter {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 6px;
+  }
+  .counter button {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--bg-card);
+    cursor: pointer; font-size: 0.8125rem; font-weight: 600; color: var(--text-2);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 150ms var(--ease);
+  }
+  .counter button:hover { border-color: var(--accent); color: var(--accent); }
+  .counter span { font-weight: 600; font-size: 0.875rem; min-width: 20px; text-align: center; }
+
+  /* ── ROI Section ── */
+  .roi {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px 28px;
+    box-shadow: var(--shadow-sm); margin-bottom: 12px;
+  }
+  .roi h2 {
+    font-size: 0.6875rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 12px;
+  }
+  .roi-energy {
+    font-size: 0.9375rem; color: var(--text-1); font-weight: 500;
+    margin-bottom: 16px; line-height: 1.4;
+  }
+  .roi-hero {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;
+  }
+  .roi-num {
+    font-size: 2.25rem; font-weight: 700; color: var(--accent);
+    line-height: 1; font-variant-numeric: tabular-nums;
+    transition: all 200ms var(--ease);
+  }
+  .roi-unit { font-size: 0.8125rem; color: var(--text-2); line-height: 1.35; }
+  .roi-breakdown {
+    margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);
+  }
+  .roi-br-item {
+    display: flex; justify-content: space-between; padding: 2px 0;
+    font-size: 0.75rem; color: var(--text-3);
+  }
+  .roi-br-item .hrs {
+    font-weight: 500; color: var(--text-2); font-variant-numeric: tabular-nums;
+  }
+  .roi-keynote {
+    font-size: 0.875rem; color: var(--accent); margin-bottom: 12px;
+  }
+  .roi-keynote strong { font-weight: 600; }
+  .roi .compare {
+    font-size: 0.8125rem; color: var(--text-3); margin-top: 0;
+    padding-top: 10px; border-top: 1px dashed var(--border);
+  }
+
+  /* ── Info Rows (collapsible, no checkbox) ── */
+  .info-row {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 4px; overflow: hidden;
+  }
+  .info-row-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .info-row-title { font-weight: 500; font-size: 0.875rem; color: var(--text-1); }
+  .info-row-chevron {
+    width: 16px; height: 16px; color: var(--text-3);
+    transition: transform 200ms var(--ease); flex-shrink: 0;
+  }
+  .info-row.expanded .info-row-chevron { transform: rotate(90deg); }
+  .info-row-body {
+    max-height: 0; overflow: hidden; transition: max-height 250ms var(--ease);
+  }
+  .info-row-body-inner {
+    padding: 0 16px 14px; font-size: 0.8125rem; color: var(--text-2); line-height: 1.6;
+  }
+  .info-row-body-inner ul { list-style: none; padding: 0; }
+  .info-row-body-inner li {
+    padding: 5px 0 5px 14px; position: relative;
+    border-left: 2px solid var(--border); margin-bottom: 2px;
+  }
+  .info-row-body-inner li strong { color: var(--text-1); font-weight: 500; }
+
+  /* ── Next Steps ── */
+  .next {
+    background: var(--accent-bg); border: 1px solid var(--accent-light);
+    border-radius: var(--radius); padding: 16px 20px; margin-top: 12px;
+  }
+  .next strong { font-size: 0.875rem; color: var(--text-1); }
+  .next ol { padding-left: 20px; margin-top: 6px; font-size: 0.8125rem; color: var(--text-2); }
+
+  /* ── Timeline ── */
+  .tl { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+  .tl-dot {
+    width: 6px; height: 6px; min-width: 6px; border-radius: 50%;
+    background: var(--accent); margin-top: 7px;
+  }
+  .tl strong { font-size: 0.875rem; color: var(--text-1); font-weight: 500; }
+  .tl p { font-size: 0.8125rem; color: var(--text-2); margin: 0; }
+
+  /* ── Closing ── */
+  .closing {
+    text-align: center; padding: 24px 0; color: var(--text-3); font-size: 0.875rem;
+  }
+  .closing .sig { margin-top: 12px; font-weight: 500; color: var(--text-1); }
+
+  /* ── Links ── */
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ═══ SIDEBAR ═══ */
+  .sb-roi { margin-bottom: 20px; }
+  .sb-roi .big {
+    font-size: 1.125rem; font-weight: 600; color: var(--accent);
+    line-height: 1.3; letter-spacing: -0.01em;
+  }
+  .sb-roi .sub { font-size: 0.8125rem; color: var(--text-3); margin-top: 4px; }
+  .sb-div { height: 1px; background: var(--border); margin: 12px 0; }
+  .sb-lbl {
+    font-size: 0.6875rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 6px;
+  }
+  .sb-items { flex: 1; overflow-y: auto; margin-bottom: 12px; }
+  .sb-item {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 4px 0; font-size: 0.8125rem;
+    animation: fadeSlide 200ms var(--ease);
+  }
+  .sb-item .n { color: var(--text-2); }
+  .sb-item .p { color: var(--text-1); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .sb-item.foundation .n { color: var(--green); font-weight: 500; }
+  .sb-item.mo .p::after {
+    content: '/mo'; font-size: 0.625rem; color: var(--text-3); font-weight: 400; margin-left: 1px;
+  }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-2px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .sb-totals { border-top: 1px solid var(--border); padding-top: 12px; }
+  .sb-tr { display: flex; justify-content: space-between; margin-bottom: 2px; }
+  .sb-tr .l { font-size: 0.8125rem; color: var(--text-3); }
+  .sb-tr .v {
+    font-size: 0.8125rem; font-weight: 500; color: var(--text-2);
+    font-variant-numeric: tabular-nums; transition: all 200ms var(--ease);
+  }
+  .sb-tr.yr { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); }
+  .sb-tr.yr .l { font-weight: 500; color: var(--text-1); }
+  .sb-tr.yr .v { font-size: 0.9375rem; color: var(--accent); font-weight: 600; }
+
+  /* ═══ MOBILE BAR ═══ */
+  .mbar {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: var(--bg-card); border-top: 1px solid var(--border); box-shadow: var(--shadow-lg);
+  }
+  .mbar-top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .mbar-roi { font-size: 0.9375rem; font-weight: 600; color: var(--accent); }
+  .mbar-cost { font-size: 0.75rem; color: var(--text-3); }
+  .mbar-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 200ms var(--ease); flex-shrink: 0;
+  }
+  .mbar-btn svg { width: 14px; height: 14px; color: var(--text-3); }
+  .mbar.open .mbar-btn { transform: rotate(180deg); }
+  .mbar-exp { max-height: 0; overflow: hidden; transition: max-height 300ms var(--ease); }
+  .mbar.open .mbar-exp { max-height: 60vh; overflow-y: auto; }
+  .mbar-exp-inner { padding: 0 20px 16px; }
+
+  @media (max-width: 960px) {
+    .side { display: none; }
+    .mbar { display: block; }
+    .main { max-width: 100%; padding: 32px 24px 80px; }
+    .hero { margin: -32px -24px 0; padding: 32px 24px 24px; }
+  }
+  @media (min-width: 961px) { .mbar { display: none !important; } }
+  @media (max-width: 600px) {
+    .main { padding: 24px 16px 80px; }
+    .hero { margin: -24px -16px 0; padding: 24px 16px 24px; }
+    .hdr h1 { font-size: 1.5rem; }
+    .preview-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<main class="main">
+
+  <div class="hero">
+    <div class="hdr">
+      <h1>The Gathering Place</h1>
+      <div class="tag">What I Can Take Off Your Plate</div>
+      <div class="meta">Izzy Piyale-Sheard &middot; March 2026</div>
+    </div>
+  </div>
+
+  <div class="narrative">
+    <p>You are at your best around the fire &mdash; coaching, curating, building rooms where people finally feel understood. That's what The Gathering Place is. Nobody else can do that part.</p>
+    <p>We've been talking for over a year now. I know how you think, what fires you up, and what drains you. You told me you've never seen someone take conversations and recreate a vision this accurately. No brief needed. So let me handle the rest &mdash; you recharge, I execute. By the time you're back, the work is done.</p>
+  </div>
+
+  <!-- Preview Card Grid -->
+  <div class="sec-label">What I've been building</div>
+  <div class="preview-grid">
+    <div class="preview-card" data-detail="pd-voice" onclick="togglePreviewCard(this)">
+      <svg class="preview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M8 5v14M4 9v6M16 5v14M20 9v6"/></svg>
+      <span class="preview-card-title">Voice Print</span>
+      <span class="preview-card-sub">The engine behind everything</span>
+    </div>
+    <div class="preview-card" data-detail="pd-site" onclick="togglePreviewCard(this)">
+      <svg class="preview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span class="preview-card-title">The Website</span>
+      <span class="preview-card-sub">Already in progress <a class="pill-link" href="https://izzydoesizzy.github.io/thegatheringplace/" target="_blank" onclick="event.stopPropagation()">live preview</a></span>
+    </div>
+    <div class="preview-card" data-detail="pd-logo" onclick="togglePreviewCard(this)">
+      <svg class="preview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><path d="M3 20l5.5-7.5 3 3.5 4-5L22 20H3z"/></svg>
+      <span class="preview-card-title">Logo + Brand Assets</span>
+      <span class="preview-card-sub">Every format, one folder</span>
+    </div>
+    <div class="preview-card" data-detail="pd-welcome" onclick="togglePreviewCard(this)">
+      <svg class="preview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="preview-card-title">Welcome Materials</span>
+      <span class="preview-card-sub">Prospectus + packet, print-ready</span>
+    </div>
+  </div>
+  <div class="preview-detail" id="pd-voice"><div class="preview-detail-inner">I've catalogued your communication style, stories, values, and emotional patterns from our conversations. The way you chase tangents and always land somewhere better. The West Wing references, the wrestling metaphors, the "right?" that keeps people locked in. This is the engine behind any content I create for you. It sounds like you &mdash; not like a content strategist's version of you.</div></div>
+  <div class="preview-detail" id="pd-site"><div class="preview-detail-inner">I took our conversations and turned them into a working prototype. The landing page, the fire visual, and the password-protected Green Room with the riddle: <a href="https://izzydoesizzy.github.io/thegatheringplace/riddle" target="_blank">riddle demo</a></div></div>
+  <div class="preview-detail" id="pd-logo"><div class="preview-detail-inner">Your logo is ready &mdash; I'll build it into every format you'll need: web, social, print, merch. PNG, transparent PNG, vector, SVG. A folder you can hand to any designer or vendor without them redoing anything.</div></div>
+  <div class="preview-detail" id="pd-welcome"><div class="preview-detail-inner">Sample prospectus and welcome packet for new members. Dark and light versions, both print-ready. The kind of thing that makes someone feel like they've joined something real before they walk through the door.</div></div>
+
+  <div class="sep"></div>
+
+  <!-- Foundation -->
+  <div class="sec-label">Foundation</div>
+  <div class="row-group">
+    <div class="row locked expanded" id="row-foundation">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" checked disabled>
+        <div class="row-info">
+          <span class="row-title">The Foundation &mdash; Website + Brand Launch</span>
+          <span class="row-sub">The base everything else builds on <span class="pill">always included</span></span>
+        </div>
+        <span class="row-hrs">~4h</span>
+        <span class="row-price">$4,500</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Already mostly built from our conversations. This locks in and goes live.</p>
+        <div class="found-group">
+          <h5>The Site</h5>
+          <ul>
+            <li>3-page custom website: Landing, Green Room, About/Culture <a class="pill-link" href="https://izzydoesizzy.github.io/thegatheringplace/" target="_blank">live preview</a></li>
+            <li>Fire visual + rotating video clips on landing</li>
+            <li>Password-protected Green Room with speaker-specific info</li>
+            <li>Mobile-responsive on all devices</li>
+          </ul>
+        </div>
+        <div class="found-group">
+          <h5>Hosting + Domain</h5>
+          <ul>
+            <li>Hosting included &mdash; on me, indefinitely <span class="saved">saves $180-360/yr</span></li>
+            <li>Domain + DNS + SSL for thegatheringplace.vision</li>
+            <li>SEO basics + social media link previews (looks right when shared on LinkedIn or in a text)</li>
+          </ul>
+        </div>
+        <div class="found-group">
+          <h5>Brand Assets</h5>
+          <ul>
+            <li>Graphic assets for clips and social: lower thirds, intro/outro cards, branded overlays</li>
+            <li>Every format you'll ever need: vectorized, PNG, transparent PNG, SVG</li>
+            <li>Organized brand asset folder you can hand to anyone <span class="saved">recreating later: $300-800</span></li>
+          </ul>
+        </div>
+        <div class="found-group">
+          <h5>Ongoing</h5>
+          <ul>
+            <li>6 months of maintenance &mdash; content updates, tweaks, changes. You don't think about it. <span class="saved">typically $50-150/mo</span></li>
+          </ul>
+        </div>
+        <div class="market-note">Similar projects typically run $3,000-5,000 before hosting and ongoing support. The site is already mostly built.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="sec-label">Content</div>
+  <div class="row-group">
+    <div class="row" data-item="linkedin" data-price="1200" data-type="onetime" data-hours="4" data-label="LinkedIn Campaign">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">LinkedIn Comeback Campaign</span>
+          <span class="row-sub">Your Undertaker return <span class="pill">20+ posts</span></span>
+        </div>
+        <span class="row-hrs">~4h</span>
+        <span class="row-price">$1,200</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">The Undertaker return, but for LinkedIn. You disappeared after the Jays lost the series &mdash; this is the American Badass coming back, not the dead man.</p>
+        <ul>
+          <li>3-phase rollout: teaser (you're back), soft launch (behind the scenes), open (membership is live)</li>
+          <li>20+ posts written in your voice &mdash; your stories, your ideas, your timing</li>
+          <li>12-issue LinkedIn newsletter arc ("The Gathering") that builds the audience before you sell</li>
+          <li>Content pillars: the barbecue epiphany, the lollipop evolution, building in public</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="row" data-item="email" data-price="1200" data-type="onetime" data-hours="4" data-label="Email Campaigns">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Email Marketing Campaigns</span>
+          <span class="row-sub">Every touchpoint, your voice <span class="pill">6 sequences</span></span>
+        </div>
+        <span class="row-hrs">~4h</span>
+        <span class="row-price">$1,200</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">From the moment someone hears about The Gathering Place to the morning after their first retreat &mdash; every email, written in your voice, ready to send.</p>
+        <ul>
+          <li>Prospect discovery sequence (LinkedIn/word of mouth &rarr; interest)</li>
+          <li>Personal invitation templates for direct outreach</li>
+          <li>Member welcome + onboarding sequence</li>
+          <li>Monthly nurture emails between retreats</li>
+          <li>Pre-retreat and post-retreat event sequences</li>
+          <li>Content drop templates for video releases and newsletter promos</li>
+        </ul>
+        <div class="market-note">All reusable across every retreat and location.</div>
+      </div></div>
+    </div>
+    <div class="row" data-item="threads" data-price="1200" data-type="onetime" data-hours="3" data-label="Threads / Instagram">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Threads / Instagram</span>
+          <span class="row-sub">The casual side of the brand <span class="pill">community</span></span>
+        </div>
+        <span class="row-hrs">~3h</span>
+        <span class="row-price">$1,200</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Behind the fire, between the retreats. The casual side of the brand.</p>
+        <ul>
+          <li>Behind-the-scenes from retreats and properties</li>
+          <li>Fire-side conversation starters and voice-memo-style posts</li>
+          <li>Clips from the "Am I Crazy" room and mentoring sessions</li>
+          <li>Building-in-public content (the American Idol approach you love)</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="row" data-item="bundle" data-price="3000" data-type="onetime" data-hours="10" data-label="Content Engine (all 3)">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">All Three <span class="bundle-badge">Save $600</span></span>
+          <span class="row-sub">Full content engine &mdash; you just show up</span>
+        </div>
+        <span class="row-hrs">~10h</span>
+        <span class="row-price">$3,000</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">I build the full content engine and run it. You just show up and be you.</p>
+        <ul>
+          <li>LinkedIn + Email + Threads combined</li>
+          <li>Unified voice across all platforms</li>
+          <li>Coordinated launch timing</li>
+          <li>$600 less than buying individually</li>
+        </ul>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Menu -->
+  <div class="sec-label">Pick what feels right</div>
+  <div class="row-group">
+    <div class="row" data-item="testimonials-written" data-price="500" data-type="onetime" data-hours="2" data-label="Testimonials (written)">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Testimonial Capture: Written + Social</span>
+          <span class="row-sub">Real words from real attendees <span class="pill">social-ready</span></span>
+        </div>
+        <span class="row-hrs">~2h</span>
+        <span class="row-price">$500</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Two people cried at the first event because they finally felt understood. That's the kind of testimonial that sells itself.</p>
+        <ul>
+          <li>Reach out to Icon attendees and future guests on your behalf</li>
+          <li>Format quotes for social media and website</li>
+          <li>Pull-quote cards for LinkedIn and Instagram</li>
+          <li>Integrated into the website testimonials section</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="row" data-item="testimonials-video" data-price="2000" data-type="onetime" data-hours="3" data-label="Testimonials (video)">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Testimonial Capture: Full Video</span>
+          <span class="row-sub">Natural, not scripted <span class="pill">full production</span></span>
+        </div>
+        <span class="row-hrs">~3h</span>
+        <span class="row-price">$2,000</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Natural conversations, not scripted interviews. I handle everything.</p>
+        <ul>
+          <li>Schedule calls with attendees you choose</li>
+          <li>Record, edit, caption, and produce clips</li>
+          <li>Website and social-ready formats</li>
+          <li><a href="https://youtu.be/xyDUx1ji3io?si=iAhyYiarME_SolZH" target="_blank">Watch the demo reel</a></li>
+        </ul>
+        <div class="market-note">Professional testimonial videos typically run $500-1,000 per person.</div>
+      </div></div>
+    </div>
+    <div class="row" data-item="clips" data-price="1000" data-type="monthly" data-hours="8" data-label="Social Media Clips">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Social Media Clip Production</span>
+          <span class="row-sub">You perform, I produce <span class="pill">daily content</span></span>
+        </div>
+        <span class="row-hrs">~8h/mo</span>
+        <span class="row-price">$1,000/mo</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Daily live shows at Muskoka. One-on-ones with your first mentee. I turn all of it into daily content.</p>
+        <ul>
+          <li>Clip selection from live shows, mentoring sessions, and fire-side conversations</li>
+          <li>Full editing: cuts, captions, branded overlays</li>
+          <li>Posted on your schedule, every day</li>
+        </ul>
+        <div class="market-note">Freelance editors charge $500-1,500/month for this.</div>
+      </div></div>
+    </div>
+    <div class="row" data-item="event-comms" data-price="1750" data-type="onetime" data-hours="3" data-label="Event Comms">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Event Communication Plans</span>
+          <span class="row-sub">Before, during, and after <span class="pill">5+ locations</span></span>
+        </div>
+        <span class="row-hrs">~3h</span>
+        <span class="row-price">$1,750</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Everything attendees need to hear before, during, and after every retreat.</p>
+        <ul>
+          <li>Reusable templates across the full seasonal rotation: Muskoka, East Coast, Kawarthas, Nova Scotia, Barbados</li>
+          <li>Pre-event: logistics, what to pack, what to expect</li>
+          <li>During-event: schedule, contact info, emergency details</li>
+          <li>Post-event: thank you, follow-up, next steps</li>
+        </ul>
+        <div class="market-note">One set of templates covers every future retreat.</div>
+      </div></div>
+    </div>
+    <div class="row" data-item="member-outreach" data-price="1150" data-type="onetime" data-hours="3" data-label="Outreach Scripts">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Member Outreach + Invitation Scripts</span>
+          <span class="row-sub">Your voice in every DM and email <span class="pill">invite sequences</span></span>
+        </div>
+        <span class="row-hrs">~3h</span>
+        <span class="row-price">$1,150</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Personal invitations that sound like you wrote them &mdash; because I know how you talk.</p>
+        <ul>
+          <li>DMs written in your voice for potential members</li>
+          <li>Interest-to-invitation email sequences</li>
+          <li>Follow-up cadence for "tell me more" responses</li>
+          <li>Warm intro templates for mutual connections</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="row" data-item="onboarding" data-price="1150" data-type="onetime" data-hours="3" data-label="Member Onboarding">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">New Member Onboarding</span>
+          <span class="row-sub">Belong before they arrive <span class="pill">welcome series</span></span>
+        </div>
+        <span class="row-hrs">~3h</span>
+        <span class="row-price">$1,150</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Make people feel like they belong before they arrive.</p>
+        <ul>
+          <li>Culture intro: the 90-second rule, pause before answering, ask more than you answer</li>
+          <li>Interaction signals explained (how to signal what kind of presence you want)</li>
+          <li>What the "Am I Crazy" room is and how it works</li>
+          <li>What to expect your first 48 hours (including West Wing Wednesday)</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="row" data-item="sales" data-price="1500" data-type="onetime" data-hours="3" data-label="Sales Frameworks">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Sales Conversation Frameworks</span>
+          <span class="row-sub">Not scripts &mdash; frameworks <span class="pill">close naturally</span></span>
+        </div>
+        <span class="row-hrs">~3h</span>
+        <span class="row-price">$1,500</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">You said it best: marketing is easy if you just make it true. These frameworks help you have honest conversations that naturally lead to commitment.</p>
+        <ul>
+          <li>Discovery conversation guide: is this person a fit for the room?</li>
+          <li>How to talk about pricing honestly (the cost is non-negotiable, but the terms are)</li>
+          <li>Responding to "that's a lot" without selling &mdash; just sharing what it actually is</li>
+          <li>When to walk away (some seats stay empty until the right person appears)</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="row" data-item="prospecting" data-price="1750" data-type="onetime" data-hours="4" data-label="Prospecting + Leads">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Prospecting + Lead Generation</span>
+          <span class="row-sub">Curate the right room <span class="pill">curation</span></span>
+        </div>
+        <span class="row-hrs">~4h</span>
+        <span class="row-price">$1,750</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Curating the room before the room curates itself.</p>
+        <ul>
+          <li>Profiles of the kind of people who belong (and who don't)</li>
+          <li>Where to find them: speaking circuits, creative communities, mutual connections</li>
+          <li>Outreach sequences that feel like invitations, not pitches</li>
+          <li>Tracking: who's been reached, who's interested, who's a fit</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="row" data-item="headshots" data-price="2000" data-type="onetime" data-hours="3" data-label="Headshots + Profiles">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Headshots, LinkedIn Banners + Profiles</span>
+          <span class="row-sub">Leave with a professional presence <span class="pill">per person</span></span>
+        </div>
+        <span class="row-hrs">~3h</span>
+        <span class="row-price">$2,000/person</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">Everyone who comes through The Gathering Place leaves with a professional presence.</p>
+        <ul>
+          <li>On-location sessions at retreats, the property, wherever makes sense</li>
+          <li>Professional headshot and custom LinkedIn banner</li>
+          <li>LinkedIn profile tuned to reflect who they actually are</li>
+          <li>Can be included in membership or offered as a standalone perk</li>
+        </ul>
+        <div class="counter" style="display:none" id="headshot-counter">
+          <button onclick="event.stopPropagation(); changeHeadshots(-1)">-</button>
+          <span id="headshot-count">1</span>
+          <button onclick="event.stopPropagation(); changeHeadshots(1)">+</button>
+          <span style="font-size:0.6875rem; color:var(--text-3);">people</span>
+        </div>
+      </div></div>
+    </div>
+    <div class="row" data-item="speaking" data-price="500" data-type="monthly" data-hours="8" data-label="Speaking Outreach">
+      <div class="row-header" onclick="toggleRow(this.parentElement)">
+        <input type="checkbox" class="row-check" onclick="event.stopPropagation(); handleCheck(this)">
+        <div class="row-info">
+          <span class="row-title">Speaking Gig Outreach + Pipeline</span>
+          <span class="row-sub">I only win when you win <span class="pill">pipeline + 10%</span></span>
+        </div>
+        <span class="row-hrs">~8h/mo</span>
+        <span class="row-price">$500/mo + 10%</span>
+        <svg class="row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+      </div>
+      <div class="row-body"><div class="row-body-inner">
+        <p class="hook">You give me an email address and your speaker kit. I go to work.</p>
+        <ul>
+          <li>Research the right conferences, events, and organizations &mdash; not just any stage</li>
+          <li>Draft personalized outreach in your voice</li>
+          <li>Build and maintain a live pipeline you can check anytime</li>
+          <li>You just show up to the calls that matter</li>
+        </ul>
+        <div class="market-note">You're already having a great year on stage. At $15K-25K per keynote, one strategically placed gig pays for months of this and everything else in this proposal.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ROI -->
+  <div class="roi">
+    <h2>The Big Picture</h2>
+    <div class="roi-energy">Every hour spent on admin is an hour you're not at the fire.</div>
+    <div class="roi-hero">
+      <span class="roi-num" id="roi-num">4</span>
+      <span class="roi-unit">hours/month back<br>for the work only you can do</span>
+    </div>
+    <div class="roi-breakdown" id="roi-breakdown"></div>
+    <div class="roi-keynote" id="roi-keynote">At $20,000 per keynote, <strong>1 gig</strong> covers your entire first year.</div>
+    <div class="compare">Hiring freelancers individually: $20,000-40,000+. Before the time to find, brief, and manage them.</div>
+  </div>
+
+  <!-- Collapsible Info Rows -->
+  <div class="info-row" onclick="toggleInfoRow(this)">
+    <div class="info-row-header">
+      <span class="info-row-title">How We Stay Connected</span>
+      <svg class="info-row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+    </div>
+    <div class="info-row-body"><div class="info-row-body-inner">
+      <ul>
+        <li><strong>Biweekly check-ins</strong> &mdash; 30 min, casual. What's moving, what's next.</li>
+        <li><strong>Async summaries</strong> &mdash; after every check-in, a short recap waiting for you.</li>
+        <li><strong>You crash, I keep building.</strong> You went dark for a week after the Icon &mdash; that's your operating system, not a flaw. When you come back, the work is done and a summary is waiting.</li>
+        <li><strong>Quarterly review</strong> &mdash; what's working, what's next, what to drop.</li>
+      </ul>
+      <p style="font-style:italic; color:var(--text-3); margin-top:8px; font-size:0.75rem;">Included, not an add-on. It's how I work.</p>
+    </div></div>
+  </div>
+
+  <div class="info-row" onclick="toggleInfoRow(this)">
+    <div class="info-row-header">
+      <span class="info-row-title">Timeline</span>
+      <svg class="info-row-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>
+    </div>
+    <div class="info-row-body"><div class="info-row-body-inner">
+      <div class="tl"><div class="tl-dot"></div><div><strong>Now to April 17</strong><p>Website live, graphics ready. You have somewhere to point people.</p></div></div>
+      <div class="tl"><div class="tl-dot"></div><div><strong>April 17-26 (Muskoka)</strong><p>Fire. No pressure. We map out the rest together.</p></div></div>
+      <div class="tl"><div class="tl-dot"></div><div><strong>May onward</strong><p>East Coast content push, Kawarthas cottage season, then Nova Scotia in the fall. We execute what we mapped out at the fire.</p></div></div>
+    </div></div>
+  </div>
+
+  <div class="next">
+    <strong>Next steps</strong>
+    <ol>
+      <li>Review this when you're back from Puerto Vallarta</li>
+      <li>Lock in the Foundation and pick any extras that feel right</li>
+      <li>Send me: your latest logo version, website credentials, video clips</li>
+    </ol>
+  </div>
+
+  <div class="closing">
+    <p>This is the beginning of a partnership, not a transaction. You invited me into this, and I take that seriously. Nothing is set in stone. We'll figure out the rest together.</p>
+    <p class="sig">Looking forward to it. &mdash; Izzy</p>
+  </div>
+
+</main>
+
+<aside class="side">
+  <div class="side-inner">
+    <div class="sb-roi">
+      <div class="big" id="sb-gigs">1 gig covers everything</div>
+      <div class="sub" id="sb-hours">4 hours/month back for the work only you can do</div>
+    </div>
+    <div class="sb-div"></div>
+    <div class="sb-lbl">Your investment</div>
+    <div class="sb-items" id="sb-items"></div>
+    <div class="sb-totals">
+      <div class="sb-tr"><span class="l">One-time</span><span class="v" id="sb-ot">$4,500</span></div>
+      <div class="sb-tr" id="sb-mo-row" style="display:none"><span class="l">Monthly</span><span class="v" id="sb-mo">$0/mo</span></div>
+      <div class="sb-tr yr"><span class="l">First year</span><span class="v" id="sb-yr">$4,500</span></div>
+    </div>
+  </div>
+</aside>
+</div>
+
+<div class="mbar" id="mbar">
+  <div class="mbar-top" onclick="document.getElementById('mbar').classList.toggle('open')">
+    <div><div class="mbar-roi" id="m-roi">1 gig covers everything</div><div class="mbar-cost" id="m-cost">$4,500 one-time</div></div>
+    <div class="mbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg></div>
+  </div>
+  <div class="mbar-exp"><div class="mbar-exp-inner">
+    <div class="sb-div" style="margin-top:0"></div>
+    <div class="sb-lbl" style="margin-top:10px">Your investment</div>
+    <div id="m-items"></div>
+    <div class="sb-totals" style="margin-top:6px">
+      <div class="sb-tr"><span class="l">One-time</span><span class="v" id="m-ot">$4,500</span></div>
+      <div class="sb-tr" id="m-mo-row" style="display:none"><span class="l">Monthly</span><span class="v" id="m-mo">$0/mo</span></div>
+      <div class="sb-tr yr"><span class="l">First year</span><span class="v" id="m-yr">$4,500</span></div>
+    </div>
+  </div></div>
+</div>
+
+<script>
+(function() {
+  var F = 4500, K = 20000, hc = 1;
+  var content = ['linkedin','email','threads'];
+  var rows = document.querySelectorAll('.row[data-item]');
+
+  function q(s) { return document.querySelector(s); }
+  function qa(s) { return document.querySelectorAll(s); }
+  function cb(item) { return q('.row[data-item="'+item+'"] .row-check'); }
+
+  // Toggle expand/collapse for rows
+  window.toggleRow = function(row) {
+    row.classList.toggle('expanded');
+    var body = row.querySelector('.row-body');
+    if (row.classList.contains('expanded')) {
+      body.style.maxHeight = body.scrollHeight + 'px';
+    } else {
+      body.style.maxHeight = '0';
+    }
+  };
+
+  // Toggle preview cards (accordion)
+  window.togglePreviewCard = function(card) {
+    var detailId = card.dataset.detail;
+    var detail = document.getElementById(detailId);
+    var isActive = card.classList.contains('active');
+
+    // Close all
+    qa('.preview-card').forEach(function(c) { c.classList.remove('active'); });
+    qa('.preview-detail').forEach(function(d) { d.style.maxHeight = '0'; d.classList.remove('open'); });
+
+    // Open this one if it wasn't already active
+    if (!isActive) {
+      card.classList.add('active');
+      detail.classList.add('open');
+      detail.style.maxHeight = detail.scrollHeight + 'px';
+    }
+  };
+
+  // Toggle info rows (bottom section)
+  window.toggleInfoRow = function(el) {
+    el.classList.toggle('expanded');
+    var body = el.querySelector('.info-row-body');
+    if (el.classList.contains('expanded')) {
+      body.style.maxHeight = body.scrollHeight + 'px';
+    } else {
+      body.style.maxHeight = '0';
+    }
+  };
+
+  // Handle checkbox independently
+  window.handleCheck = function(checkbox) {
+    var row = checkbox.closest('.row');
+    var item = row.dataset.item;
+
+    // Bundle logic
+    if (item === 'bundle') {
+      if (checkbox.checked) {
+        content.forEach(function(c) {
+          var r = q('.row[data-item="'+c+'"]');
+          r.querySelector('.row-check').checked = true;
+          r.classList.add('selected');
+        });
+      }
+    } else if (content.indexOf(item) !== -1) {
+      var all = content.every(function(c) { return cb(c).checked; });
+      var bundleRow = q('.row[data-item="bundle"]');
+      if (all && !cb('bundle').checked) {
+        cb('bundle').checked = true;
+        bundleRow.classList.add('selected');
+      }
+      if (!checkbox.checked && cb('bundle').checked) {
+        cb('bundle').checked = false;
+        bundleRow.classList.remove('selected');
+      }
+    }
+
+    // Headshot counter
+    if (item === 'headshots') {
+      document.getElementById('headshot-counter').style.display = checkbox.checked ? 'inline-flex' : 'none';
+    }
+
+    row.classList.toggle('selected', checkbox.checked);
+    recalc();
+  };
+
+  window.changeHeadshots = function(d) {
+    hc = Math.max(1, hc + d);
+    document.getElementById('headshot-count').textContent = hc;
+    recalc();
+  };
+
+  // Expand foundation by default
+  var foundBody = q('#row-foundation .row-body');
+  if (foundBody) foundBody.style.maxHeight = foundBody.scrollHeight + 'px';
+
+  function itemsHTML(items) {
+    var h = '<div class="sb-item foundation"><span class="n">The Foundation</span><span class="p">$4,500</span></div>';
+    items.forEach(function(i) {
+      h += '<div class="sb-item'+(i.mo?' mo':'')+'"><span class="n">'+i.label+'</span><span class="p">$'+i.price.toLocaleString()+'</span></div>';
+    });
+    return h;
+  }
+
+  function recalc() {
+    var ot = F, mo = 0, hrs = 4, sel = [], brk = [];
+    var bundleOn = cb('bundle').checked;
+
+    rows.forEach(function(row) {
+      var check = row.querySelector('.row-check');
+      if (!check.checked) return;
+      var item = row.dataset.item;
+      var price = parseInt(row.dataset.price)||0;
+      var type = row.dataset.type;
+      var h = parseInt(row.dataset.hours)||0;
+      var label = row.dataset.label||item;
+
+      if (bundleOn && content.indexOf(item) !== -1) return;
+      if (item === 'headshots') {
+        var t = price * hc;
+        ot += t; hrs += h * hc;
+        sel.push({label:label+(hc>1?' ('+hc+')':''), price:t, mo:false});
+        brk.push({label:label+(hc>1?' ('+hc+')':''), hours:'~'+(h*hc)+'h'});
+        return;
+      }
+      if (type === 'monthly') {
+        mo += price;
+        sel.push({label:label, price:price, mo:true});
+        brk.push({label:label, hours:'~'+h+'h/mo'});
+      } else {
+        ot += price;
+        sel.push({label:label, price:price, mo:false});
+        brk.push({label:label, hours:'~'+h+'h'});
+      }
+      hrs += h;
+    });
+
+    var yr = ot + mo * 12;
+    var gigs = Math.ceil(yr / K);
+    var html = itemsHTML(sel);
+
+    // Sidebar + mobile items
+    q('#sb-items').innerHTML = html;
+    q('#m-items').innerHTML = html;
+
+    var gt = gigs + ' gig' + (gigs!==1?'s':'') + ' cover' + (gigs===1?'s':'') + ' everything';
+    var ht = hrs + ' hours/month back for the work only you can do';
+
+    q('#sb-gigs').textContent = gt;
+    q('#sb-hours').textContent = ht;
+    q('#sb-ot').textContent = '$' + ot.toLocaleString();
+    q('#sb-yr').textContent = '$' + yr.toLocaleString();
+    q('#sb-mo-row').style.display = mo > 0 ? 'flex' : 'none';
+    q('#sb-mo').textContent = '$' + mo.toLocaleString() + '/mo';
+
+    q('#m-roi').textContent = gt;
+    var cs = '$' + ot.toLocaleString() + ' one-time';
+    if (mo > 0) cs += ' + $' + mo.toLocaleString() + '/mo';
+    q('#m-cost').textContent = cs;
+    q('#m-ot').textContent = '$' + ot.toLocaleString();
+    q('#m-yr').textContent = '$' + yr.toLocaleString();
+    q('#m-mo-row').style.display = mo > 0 ? 'flex' : 'none';
+    q('#m-mo').textContent = '$' + mo.toLocaleString() + '/mo';
+
+    // ROI section — big number + breakdown
+    q('#roi-num').textContent = hrs;
+    var brkHtml = '<div class="roi-br-item"><span>The Foundation</span><span class="hrs">~4h</span></div>';
+    brk.forEach(function(b) {
+      brkHtml += '<div class="roi-br-item"><span>'+b.label+'</span><span class="hrs">'+b.hours+'</span></div>';
+    });
+    q('#roi-breakdown').innerHTML = brkHtml;
+    q('#roi-keynote').innerHTML = 'At $20,000 per keynote, <strong>' + gigs + ' gig' + (gigs!==1?'s':'') + '</strong> cover' + (gigs===1?'s':'') + ' your entire first year.';
+  }
+
+  recalc();
+})();
+</script>
+</body>
+</html>
